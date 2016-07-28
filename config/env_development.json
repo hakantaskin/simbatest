@@ -1,0 +1,9 @@
+{
+  "name": "development",
+  "description": "Add here any environment specific stuff you like.",
+  "metcase_url": "http://testing.metcase.metglobaltech.com/staff/",
+  "call_screen": "http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/[callerid]/[website]/[uniqueid]",
+  "metsync_url": "http://testing.metsync.metglobaltech.com/",
+  "api_url": "http://172.22.3.199/token/[agent]/[token]",
+  "api_token":"http://172.22.3.199/token/[agent]"
+}
