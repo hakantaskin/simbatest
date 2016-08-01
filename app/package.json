@@ -1,9 +1,9 @@
 {
   "name": "simba",
   "productName": "Simba",
-  "description": "Simba callcenter app",
+  "description": "Simba callcenter App",
   "version": "0.1.0",
-  "author": "Hakan Taskin",
+  "author": "Metglobal",
   "copyright": "© 2016, Metglobal",
   "main": "background.js",
   "dependencies": {

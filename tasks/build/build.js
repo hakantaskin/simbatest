@@ -84,9 +84,6 @@ gulp.task('less-watch', lessTask);
 gulp.task('environment', ['clean'], function () {
     var configFile = 'config/env_' + utils.getEnvName() + '.json';
     projectDir.copy(configFile, destDir.path('env.json'));
-
-    var siteFile = 'config/site.json';
-    projectDir.copy(siteFile, destDir.path('site.json'));
 });
 
 

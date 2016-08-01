@@ -5,5 +5,7 @@
   "call_screen": "http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/[callerid]/[website]/[uniqueid]",
   "metsync_url": "http://metsync.metglobaltech.com/",
   "api_url": "http://172.22.3.199/token/[agent]/[token]",
-  "api_token":"http://172.22.3.199/token/[agent]"
+  "api_token":"http://172.22.3.199/token/[agent]",
+  "version_url": "http://172.22.3.199/simbaversion",
+  "simba_download_url": "http://172.22.3.199/latest_simba.zip"
 }

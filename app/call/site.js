@@ -12,26 +12,26 @@
     var app = remote.app;
     var appDir = jetpack.cwd(app.getAppPath());
 
-    var config_file = 'config/site.json';
+    var config_file = '../site.txt';
 
     $(document).ready(function(){
       $('.set_website').click(function(){
         var attr_id = $(this).attr('attr-id');
         var obj = {id: attr_id};
 
-        jsonfile.writeFile(config_file, obj, function (err){
+        jetpack.write(config_file, obj, function (err){
           if(err != null){
               console.error(err);
           }
         });
 
-        jsonfile.readFile(config_file, function(err, site) {
+        jetpack.read(config_file, function(err, site) {
           if (err != null){
             console.error(err);
           }
-          if (site.id != ""){
+          if (site != ""){
             alert('Site id güncellendi');
-            console.log('Site id güncellendi - ' + site.id);
+            console.log('Site id güncellendi - ' + site);
           } else {
             console.error('Site id değiştirilirken sorun oluştu');
           }

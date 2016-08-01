@@ -3,8 +3,8 @@ import jetpack from 'fs-jetpack'; // module loaded from npm
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 
-var files = '/Avaya one-X Communicator/';
-var log_files = '/Avaya one-X Communicator/Log Files/';
+var files = "\\Avaya\\Avaya one-X Communicator\\";
+var log_files = "\\Avaya\\Avaya one-X Communicator\\Log Files\\";
 
 export var get_caller_id = function () {
   var file_name = 'onexcapi.txt';
@@ -77,7 +77,9 @@ export var get_user_name = function () {
   var data = src.read(file_name, 'xml');
   var parameters = {};
   var user_name = '';
+  console.log(path + files + file_name);
   parser.parseString(data, function (err, result) {
+    if (err) throw err;
     parameters = result.ConfigData.parameter;
     parameters.forEach(function(parameter, key){
       if (typeof parameter.name['0'] != 'undefined' && parameter.name['0'] == 'SipUserAccount') {

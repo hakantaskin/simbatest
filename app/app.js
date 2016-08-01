@@ -8,9 +8,10 @@ import { get_caller_id, get_last_conn_id, get_user_name,
          get_last_direction, get_last_call_id, get_files_url,
          get_log_files_url } from './call/xml';
 import env from './env';
-import site from './site';
+
 var fs = require('fs');
 var request = require('request');
+var site = jetpack.read('site.txt');
 
 var caller_id = '';
 var last_conn_id = '';
@@ -53,8 +54,8 @@ var watch_file = function (){
 };
 
 var notifier_api = function(token) {
-  var site = jetpack.cwd(__dirname).read('site.json', 'json');
-  if (site.id == '') {
+  var site = jetpack.read('site.txt', 'txt');
+  if (site == '') {
     return false;
   }
   var new_conn_id = get_last_conn_id();
@@ -64,7 +65,7 @@ var notifier_api = function(token) {
   caller_id = get_caller_id();
   user_name = get_user_name();
   last_direction = get_last_direction();
-  website = get_website(site.id);
+  website = get_website(site);
   timestamp = new Date().getTime();
   console.log("caller id : " + caller_id);
   if(new_conn_id != '' && last_conn_id == new_conn_id){
@@ -101,7 +102,7 @@ var notifier_api = function(token) {
   });
 
   var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
-  var map_screen_value = [caller_id, site.id, token];
+  var map_screen_value = [caller_id, site, token];
 
   var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
   if (last_conn_id != new_conn_id || first_conn_id == 'first') {
