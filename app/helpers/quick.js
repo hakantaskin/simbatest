@@ -1,3 +1,4 @@
+var fs = require('fs');
 export var get_website = function (websiteid) {
   var website = "";
   switch(websiteid) {
@@ -34,4 +35,18 @@ export var get_clean_caller_id = function (callerid) {
     callerid = temp_url.replace(value, map_value[key]);
   });
   return temp_url;
+}
+
+export var error_log = function (log) {
+  fs.appendFile('error_log.txt', log, (err) => {
+    if (err) throw err;
+  });
+  console.error(log);
+}
+
+export var info_log = function (log) {
+  fs.appendFile('info_log.txt', log, (err) => {
+    if (err) throw err;
+  });
+  console.log(log);
 }

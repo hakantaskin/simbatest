@@ -2,7 +2,7 @@ const remote = require('electron').remote;
 const app = remote.app;
 const {ipcRenderer} = require('electron');
 import createWindow from './helpers/window';
-import { get_website, url_generate, get_clean_caller_id } from './helpers/quick';
+import { get_website, url_generate, get_clean_caller_id, error_log, info_log } from './helpers/quick';
 import jetpack from 'fs-jetpack';
 import { get_caller_id, get_last_conn_id, get_user_name,
          get_last_direction, get_last_call_id, get_files_url,
@@ -22,9 +22,8 @@ var temp_url = '';
 var timestamp = '';
 var website = '';
 var token = '';
-var first_conn_id = '';
 var log_file = get_log_files_url();
-
+var i = 0;
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
     //if (env.name !== 'production') {
@@ -35,20 +34,24 @@ var setApplicationMenu = function () {
 
 var watch_file = function (){
   fs.watchFile(log_file, (curr, prev) => {
-    user_name = get_user_name();
-    var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
-    var new_conn_id = get_last_conn_id();
-    if(new_conn_id != last_conn_id || token == '') {
-      request.get(temp_api_token, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          token = body;
-          notifier_api(token);
-        } else {
-          console.error("Server error status code : " + response.statusCode);
-        }
-      });
-    } else {
-      notifier_api(token);
+    i++;
+    if(i != 1){
+      var first_conn_id = '';
+      user_name = get_user_name();
+      var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
+      var new_conn_id = get_last_conn_id();
+      if(new_conn_id != last_conn_id || token == '') {
+        request.get(temp_api_token, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            token = body;
+            notifier_api(token);
+          } else {
+            error_log("Server error status code : " + response.statusCode);
+          }
+        });
+      } else {
+        notifier_api(token);
+      }
     }
   });
 };
@@ -67,9 +70,8 @@ var notifier_api = function(token) {
   last_direction = get_last_direction();
   website = get_website(site);
   timestamp = new Date().getTime();
-  console.log("caller id : " + caller_id);
   if(new_conn_id != '' && last_conn_id == new_conn_id){
-    console.error("Last connection = "+last_conn_id+" == new conn id = " + new_conn_id);
+    error_log("Last connection = "+last_conn_id+" == new conn id = " + new_conn_id);
     return false;
   }
 
@@ -79,7 +81,7 @@ var notifier_api = function(token) {
   }
 
   if (env.api_url.length < 1) {
-    console.error("Api url not found");
+    error_log("Api url not found");
     return false;
   }
 
@@ -97,7 +99,7 @@ var notifier_api = function(token) {
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
     } else {
-      console.error("Server error status code : " + response.statusCode);
+      error_log("Server error status code : " + response.statusCode);
     }
   });
 

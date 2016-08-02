@@ -4,10 +4,11 @@
 // window from here.
 import os from 'os';
 import { app, Menu, ipcMain } from 'electron';
-import { devMenuTemplate } from './helpers/dev_menu_template';
+import { devMenuTemplate, prodMenuTemplate } from './helpers/dev_menu_template';
 import { editMenuTemplate } from './helpers/edit_menu_template';
 import createWindow from './helpers/window';
 import jetpack from 'fs-jetpack';
+import { error_log, info_log } from './helpers/quick';
 const fs = require('fs');
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
@@ -15,18 +16,21 @@ const fs = require('fs');
 import env from './env';
 var site = jetpack.read('site.txt', 'txt');
 if(site == undefined) {
-  console.log("undefined");
   fs.writeFile('./site.txt', '', (err) => {
-    if (err) throw err;
+    if (err){
+      error_log(err);
+      throw err;
+    }
   });
 }
-console.log(app.getPath('appData'));
+
 var mainWindow;
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
-    //if (env.name !== 'production') {
+    if (env.name !== 'production') {
         menus.push(devMenuTemplate);
-    //}
+    }
+    menus.push(prodMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
@@ -37,13 +41,13 @@ app.on('ready', function () {
     var options = {
       width: 1000,
       height:600,
-      show:true
+      show:false
     }
 
     var mainWindow = createWindow('main', options);
     var settings_options = {
       width: 350,
-      height:150,
+      height:300,
       parent:mainWindow
     }
 
@@ -52,7 +56,7 @@ app.on('ready', function () {
     }
 
     mainWindow.loadURL(url);
-    if(site.toString() == '' || site == undefined){
+    if(site == '' || site == undefined){
       settingsWindow.loadURL(settings_url);
     }
 
