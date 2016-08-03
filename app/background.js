@@ -89,6 +89,7 @@ app.on('ready', function () {
 });
 
 app.on('window-all-closed', function (event) {
-    event.preventDefault();
+  if (process.platform != 'darwin'){
     app.quit();
+  }
 });

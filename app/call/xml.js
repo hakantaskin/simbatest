@@ -77,7 +77,6 @@ export var get_user_name = function () {
   var data = src.read(file_name, 'xml');
   var parameters = {};
   var user_name = '';
-  console.log(path + files + file_name);
   parser.parseString(data, function (err, result) {
     if (err) throw err;
     parameters = result.ConfigData.parameter;

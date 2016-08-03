@@ -22,21 +22,19 @@ var temp_url = '';
 var timestamp = '';
 var website = '';
 var token = '';
+var first_conn_id = '';
 var log_file = get_log_files_url();
-var i = 0;
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
-    //if (env.name !== 'production') {
+    if (env.name !== 'production') {
         menus.push(devMenuTemplate);
-    //}
+    }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
 var watch_file = function (){
-  fs.watchFile(log_file, (curr, prev) => {
-    i++;
-    if(i != 1){
-      var first_conn_id = '';
+  fs.watch(log_file, (event, filename) => {
+    if(event == 'change'){
       user_name = get_user_name();
       var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
       var new_conn_id = get_last_conn_id();
@@ -70,10 +68,6 @@ var notifier_api = function(token) {
   last_direction = get_last_direction();
   website = get_website(site);
   timestamp = new Date().getTime();
-  if(new_conn_id != '' && last_conn_id == new_conn_id){
-    error_log("Last connection = "+last_conn_id+" == new conn id = " + new_conn_id);
-    return false;
-  }
 
   if (last_conn_id == '') {
     first_conn_id = 'first';
@@ -107,7 +101,7 @@ var notifier_api = function(token) {
   var map_screen_value = [caller_id, site, token];
 
   var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-  if (last_conn_id != new_conn_id || first_conn_id == 'first') {
+  if (last_conn_id != new_conn_id || ((last_conn_id == new_conn_id) && first_conn_id == 'first')) {
       var call_screen_options = {
         width: 800,
         height:600
