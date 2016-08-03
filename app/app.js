@@ -42,6 +42,7 @@ var watch_file = function (){
       var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != last_conn_id) {
+        info_log('IF: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
         last_conn_id = get_last_conn_id();
         open_window = 'open';
         request.get(temp_api_token, function (error, response, body) {
@@ -53,6 +54,7 @@ var watch_file = function (){
           }
         });
       } else {
+        info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
         notifier_api(token);
       }
     }
