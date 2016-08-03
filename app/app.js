@@ -45,13 +45,13 @@ var watch_file = function (){
         info_log('IF: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
         last_conn_id = get_last_conn_id();
         open_window = 'open';
-        request.get(temp_api_token, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            token = body;
+        http.get(temp_api_token, (res) => {
+          res.on("data", function(chunk) {
+            token = chunk;
             notifier_api(token);
-          } else {
-            error_log("Server error status code : " + response.statusCode);
-          }
+          });
+        }).on('error', (e) => {
+          error_log('Got error: ' + e.message);
         });
       } else {
         info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
