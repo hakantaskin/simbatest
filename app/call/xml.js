@@ -22,7 +22,7 @@ export var get_caller_id = function () {
   if(callerids.length > 0){
       return callerids[(callerids.length - 1)];
   } else {
-    console.error('callerid not found');
+    info_log('callerid not found');
     return '';
   }
 
@@ -42,7 +42,7 @@ export var get_last_conn_id = function () {
   if(connectionids.length > 0){
       return connectionids[(connectionids.length - 1)];
   } else {
-    console.error('connectionid not found');
+    info_log('connectionid not found');
     return '';
   }
 }
@@ -65,7 +65,7 @@ export var get_last_direction = function () {
       return 'in';
     }
   } else {
-    console.error('directions not found');
+    info_log('directions not found');
     return '';
   }
 }
@@ -85,7 +85,7 @@ export var get_user_name = function () {
         if (typeof parameter.value['0'] != 'undefined') {
           user_name =  parameter.value['0'];
         } else {
-          console.error('username not found');
+          info_log('username not found');
         }
       }
     });
@@ -104,7 +104,7 @@ export var get_last_call_id = function () {
     if (typeof result.CallHistoryInformation.nextSessionId[0] != 'undefined') {
         next_session_id =  result.CallHistoryInformation.nextSessionId[0];
     } else {
-      console.error ('next session id not found');
+      info_log ('next session id not found');
     }
   });
 

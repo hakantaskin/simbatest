@@ -23,6 +23,7 @@ var timestamp = '';
 var website = '';
 var token = '';
 var first_conn_id = '';
+var open_window = '';
 var log_file = get_log_files_url();
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
@@ -35,10 +36,14 @@ var setApplicationMenu = function () {
 var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
     if(event == 'change'){
+      first_conn_id = '';
+      open_window = '';
       user_name = get_user_name();
       var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
       var new_conn_id = get_last_conn_id();
-      if(new_conn_id != last_conn_id || token == '') {
+      if(new_conn_id != last_conn_id) {
+        last_conn_id = get_last_conn_id();
+        open_window = 'open';
         request.get(temp_api_token, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             token = body;
@@ -68,10 +73,9 @@ var notifier_api = function(token) {
   last_direction = get_last_direction();
   website = get_website(site);
   timestamp = new Date().getTime();
-
-  if (last_conn_id == '') {
-    first_conn_id = 'first';
-    last_conn_id = new_conn_id;
+  if(token == ''){
+    info_log('Token not found');
+    return false;
   }
 
   if (env.api_url.length < 1) {
@@ -101,14 +105,13 @@ var notifier_api = function(token) {
   var map_screen_value = [caller_id, site, token];
 
   var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-  if (last_conn_id != new_conn_id || ((last_conn_id == new_conn_id) && first_conn_id == 'first')) {
+  if (open_window == 'open') {
       var call_screen_options = {
         width: 800,
         height:600
       }
       // Create a new window
       var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url]);
-      last_conn_id = get_last_conn_id();
   }
 };
 
