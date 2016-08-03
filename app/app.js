@@ -10,6 +10,7 @@ import { get_caller_id, get_last_conn_id, get_user_name,
 import env from './env';
 
 var fs = require('fs');
+const http = require('http');
 var request = require('request');
 var site = jetpack.read('site.txt');
 
