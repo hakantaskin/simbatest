@@ -42,12 +42,12 @@ var watch_file = function (){
       if(new_conn_id != last_conn_id) {
         token_generate_is_running[new_conn_id] = true;
         token_generate_is_running.join();
-        info_log('IF: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+        info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
         last_conn_id = get_last_conn_id();
         http.get(temp_api_token, (res) => {
           res.on("data", function(chunk) {
             new_token = chunk;
-            info_log("token data event token : " + new_token);
+            info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
             var index = token_generate_is_running.indexOf(new_conn_id);
             if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
               token_generate_is_running.splice(new_conn_id, 1);
@@ -58,11 +58,11 @@ var watch_file = function (){
           error_log('Got error: ' + e.message);
         });
       } else {
-        info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+        info_log('ELSE: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
         var  refreshIntervalId = setInterval(function(){
           if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
             clearInterval(refreshIntervalId);
-            info_log("conn id : " + new_conn_id+" clear interval");
+            info_log("Conn ID: " + new_conn_id + " / Clear Interval");
             notifier_api(new_token, 'none');
           }
         },250);
@@ -107,9 +107,10 @@ var notifier_api = function(funct_token, func_window) {
     "connection_id": last_conn_id,
     "website": website
   };
+  
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      info_log('Token: '+ token +' - Simba calllogs post ok.');
+      info_log('Conn ID: ' + last_conn_id + ' / Token: '+ token +' / Simba calllogs post ok.');
     } else {
       error_log("Server error status code : " + response.statusCode);
     }
