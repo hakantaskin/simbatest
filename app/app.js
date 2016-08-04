@@ -22,10 +22,9 @@ var last_direction = '';
 var temp_url = '';
 var timestamp = '';
 var website = '';
-var token = '';
-var first_conn_id = '';
-var open_window = '';
+var new_token = '';
 var log_file = get_log_files_url();
+var token_generate_is_running = [];
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
     if (env.name !== 'production') {
@@ -37,32 +36,45 @@ var setApplicationMenu = function () {
 var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
     if(event == 'change'){
-      first_conn_id = '';
-      open_window = '';
       user_name = get_user_name();
       var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != last_conn_id) {
+        token_generate_is_running[new_conn_id] = true;
+        token_generate_is_running.join();
         info_log('IF: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
         last_conn_id = get_last_conn_id();
-        open_window = 'open';
         http.get(temp_api_token, (res) => {
           res.on("data", function(chunk) {
-            token = chunk;
-            notifier_api(token);
+            new_token = chunk;
+            info_log("token data event token : " + new_token);
+          });
+          res.on('end', function(){
+            info_log("token end event conn id : " + new_conn_id);
+            var index = token_generate_is_running.indexOf(new_conn_id);
+            if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
+              token_generate_is_running.splice(new_conn_id, 1);
+            }
+            notifier_api(new_token, 'open');
           });
         }).on('error', (e) => {
           error_log('Got error: ' + e.message);
         });
       } else {
         info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
-        notifier_api(token);
+        var  refreshIntervalId setInterval(function(){
+          if(typeof token_generate_is_running[new_conn_id]) == 'undefined'){
+            clearInterval(refreshIntervalId);
+            info_log("clear interval");
+            notifier_api(new_token, 'none');
+          }
+        },250);
       }
     }
   });
 };
 
-var notifier_api = function(token) {
+var notifier_api = function(funct_token, func_window) {
   var site = jetpack.read('site.txt', 'txt');
   if (site == '') {
     return false;
@@ -76,7 +88,7 @@ var notifier_api = function(token) {
   last_direction = get_last_direction();
   website = get_website(site);
   timestamp = new Date().getTime();
-  if(token == ''){
+  if(funct_token == ''){
     info_log('Token not found');
     return false;
   }
@@ -87,10 +99,10 @@ var notifier_api = function(token) {
   }
 
   map_key = ["[agent]", "[token]"];
-  map_value = [user_name, token];
+  map_value = [user_name, funct_token];
   temp_url = url_generate(env.api_url, map_key, map_value);
   var post_query = {
-    "token": token,
+    "token": funct_token,
     "direction": last_direction,
     "caller": caller_id,
     "agent": user_name,
@@ -99,22 +111,23 @@ var notifier_api = function(token) {
   };
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
+      info_log('Simba calllogs post ok.');
     } else {
       error_log("Server error status code : " + response.statusCode);
     }
   });
 
   var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
-  var map_screen_value = [caller_id, site, token];
+  var map_screen_value = [caller_id, site, funct_token];
 
   var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-  if (open_window == 'open') {
+  if (func_window == 'open') {
       var call_screen_options = {
         width: 800,
         height:600
       }
       // Create a new window
-      var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url]);
+      var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url]);
   }
 };
 

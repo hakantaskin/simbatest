@@ -111,6 +111,25 @@ export var get_last_call_id = function () {
   return next_session_id;
 }
 
+export var get_created_event = function () {
+  var file_name = 'onexcapi.txt';
+  var path = app.getPath('appData'); // appData ile degisecek
+  var src = jetpack.cwd(path + log_files);
+  var data = src.read(file_name, 'txt');
+  var created_event = [];
+  var i = 0;
+  var result = data.match(/<SessionCreatedEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">(.*?)<\/SessionCreatedEvent>/g).map(function(val){
+     created_event[i] = result;
+     i++;
+  });
+  if(created_event.length > 0){
+    return created_event[(created_event.length - 1);
+  } else {
+    info_log('created event not found');
+    return '';
+  }
+}
+
 export var get_files_url = function () {
   var file_name = 'onexcapi.txt';
   var path = app.getPath('appData'); // appData ile degisecek
