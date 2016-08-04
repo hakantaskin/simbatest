@@ -13,10 +13,11 @@ const fs = require('fs');
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
  // module loaded from npm
+var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 import env from './env';
-var site = jetpack.read('site.txt', 'txt');
+var site = jetpack.read( simba_file_path + 'site.txt', 'txt');
 if(site == undefined) {
-  fs.writeFile('./site.txt', '', (err) => {
+  fs.writeFile( simba_file_path + 'site.txt', '', (err) => {
     if (err){
       error_log(err);
       throw err;

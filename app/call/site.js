@@ -8,6 +8,7 @@
     var env = require('./../env');
     var jsonfile = require('jsonfile');
     var fs = require('fs');
+    var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 
     console.log('Loaded environment variables:', env);
     var app = remote.app;
@@ -20,13 +21,13 @@
         var attr_id = $(this).attr('attr-id');
         var obj = attr_id;
 
-        fs.writeFile('./' + config_file, obj, function (err){
+        fs.writeFile(simba_file_path + config_file, obj, function (err){
           if(err != null){
               console.error(err);
           }
         });
 
-        fs.readFile('./' + config_file, function (err, site) {
+        fs.readFile(simba_file_path + config_file, function (err, site) {
           if (err != null){
             console.error(err);
           }

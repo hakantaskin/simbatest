@@ -12,7 +12,8 @@ import env from './env';
 var fs = require('fs');
 const http = require('http');
 var request = require('request');
-var site = jetpack.read('site.txt');
+var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
+var site = jetpack.read(simba_file_path + 'site.txt');
 
 var caller_id = '';
 var last_conn_id = '';
@@ -72,7 +73,7 @@ var watch_file = function (){
 };
 
 var notifier_api = function(funct_token, func_window) {
-  var site = jetpack.read('site.txt', 'txt');
+  var site = jetpack.read(simba_file_path + 'site.txt', 'txt');
   if (site == '') {
     return false;
   }
@@ -107,7 +108,7 @@ var notifier_api = function(funct_token, func_window) {
     "connection_id": last_conn_id,
     "website": website
   };
-  
+
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       info_log('Conn ID: ' + last_conn_id + ' / Token: '+ token +' / Simba calllogs post ok.');
