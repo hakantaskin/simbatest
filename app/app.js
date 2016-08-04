@@ -42,7 +42,7 @@ var watch_file = function (){
       if(new_conn_id != last_conn_id) {
         token_generate_is_running[new_conn_id] = true;
         token_generate_is_running.join();
-        info_log('IF: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
+        info_log('IF: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
         last_conn_id = get_last_conn_id();
         http.get(temp_api_token, (res) => {
           res.on("data", function(chunk) {
@@ -58,7 +58,7 @@ var watch_file = function (){
           error_log('Got error: ' + e.message);
         });
       } else {
-        info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
+        info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
         var  refreshIntervalId = setInterval(function(){
           if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
             clearInterval(refreshIntervalId);
