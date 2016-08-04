@@ -62,7 +62,7 @@ var watch_file = function (){
         });
       } else {
         info_log('ELSE: New Conn: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + token);
-        var  refreshIntervalId setInterval(function(){
+        var  refreshIntervalId = setInterval(function(){
           if(typeof token_generate_is_running[new_conn_id]) == 'undefined'){
             clearInterval(refreshIntervalId);
             info_log("clear interval");
