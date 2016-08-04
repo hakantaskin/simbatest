@@ -123,7 +123,7 @@ export var get_created_event = function () {
      i++;
   });
   if(created_event.length > 0){
-    return created_event[(created_event.length - 1);
+    return created_event[(created_event.length - 1)];
   } else {
     info_log('created event not found');
     return '';
