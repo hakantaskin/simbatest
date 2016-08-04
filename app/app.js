@@ -62,7 +62,7 @@ var watch_file = function (){
         var  refreshIntervalId = setInterval(function(){
           if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
             clearInterval(refreshIntervalId);
-            info_log("clear interval");
+            info_log("conn id : " + new_conn_id+" clear interval");
             notifier_api(new_token, 'none');
           }
         },250);
@@ -104,11 +104,12 @@ var notifier_api = function(funct_token, func_window) {
     "caller": caller_id,
     "agent": user_name,
     "timestamp": timestamp,
-    "connection_id": last_conn_id
+    "connection_id": last_conn_id,
+    "website": website
   };
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      info_log('Simba calllogs post ok.');
+      info_log('Token: '+ token +' - Simba calllogs post ok.');
     } else {
       error_log("Server error status code : " + response.statusCode);
     }
