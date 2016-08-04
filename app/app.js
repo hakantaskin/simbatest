@@ -48,9 +48,6 @@ var watch_file = function (){
           res.on("data", function(chunk) {
             new_token = chunk;
             info_log("token data event token : " + new_token);
-          });
-          res.on('end', function(){
-            info_log("token end event conn id : " + new_conn_id);
             var index = token_generate_is_running.indexOf(new_conn_id);
             if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
               token_generate_is_running.splice(new_conn_id, 1);
