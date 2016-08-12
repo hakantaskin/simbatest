@@ -19,8 +19,7 @@ var site = jetpack.read( simba_file_path + 'site.txt', 'txt');
 if(site == undefined) {
   fs.writeFile( simba_file_path + 'site.txt', '', (err) => {
     if (err){
-      error_log(err);
-      throw err;
+      info_log(err);
     }
   });
 }

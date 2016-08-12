@@ -126,8 +126,11 @@ var notifier_api = function(funct_token, func_window) {
         width: 800,
         height:600
       }
+      if(caller_id == '444' || (caller_id.length > 5 && caller_id.indexOf('*') == -1)){
+        var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url]);
+      }
       // Create a new window
-      var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url]);
+
   }
 };
 
