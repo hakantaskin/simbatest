@@ -13,6 +13,7 @@ export var get_caller_id = function () {
   var data = src.read(file_name, 'txt');
   var callerids = [];
   var i = 0;
+  var caller_id = '';
   var result = data.match(/<remoteAddress>(.*?)<\/remoteAddress>/g).map(function(val){
     if(val.length > 0){
       callerids[i] = val.replace(/<\/?remoteAddress>/g,'');
@@ -20,10 +21,13 @@ export var get_caller_id = function () {
     }
   });
   if(callerids.length > 0){
-      return callerids[(callerids.length - 1)];
+      caller_id = callerids[(callerids.length - 1)];
+      caller_id = caller_id.replace('@', '');
+      caller_id = caller_id.replace('+', '');
+      return caller_id;
   } else {
     info_log('callerid not found');
-    return '';
+    return caller_id;
   }
 
 };
