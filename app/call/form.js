@@ -10,7 +10,15 @@
       var caller_id = arg[2];
       var website = arg[3];
       var agent = arg[4];
-      document.getElementByClassName('tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:640px; height:480px"></webview>';
-      document.getElementByClassName('phone_number').innerHTML = 'Phone Number :' + caller_id;
+      prepare(url, caller_id);
     });
+
+    var prepare = function(url, caller_id){
+      console.log("burada");
+      document.addEventListener('DOMContentLoaded', function () {
+        console.log("burada 2");
+        document.getElementByClassName('tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:640px; height:480px"></webview>';
+        document.getElementByClassName('phone_number').innerHTML = 'Phone Number :' + caller_id;
+      }
+    }
 }());
