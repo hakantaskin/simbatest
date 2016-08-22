@@ -22,7 +22,7 @@ var paths = {
         './node_modules/**',
         './helpers/**',
         './call/**',
-        './call/**',
+        './form/**',
         './**/*.html',
         './**/*.+(jpg|png|svg)',
         './**/stylesheets/**',
