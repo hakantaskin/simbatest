@@ -22,6 +22,7 @@ var paths = {
         './node_modules/**',
         './helpers/**',
         './call/**',
+        './call/**',
         './**/*.html',
         './**/*.+(jpg|png|svg)',
         './**/stylesheets/**',
@@ -52,7 +53,6 @@ var bundleApplication = function () {
     return Q.all([
             bundle(srcDir.path('background.js'), destDir.path('background.js')),
             bundle(srcDir.path('app.js'), destDir.path('app.js')),
-            bundle(srcDir.path('form.js'), destDir.path('form.js')),
         ]);
 };
 
