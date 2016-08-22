@@ -1,7 +1,6 @@
 const { ipcRenderer } = require('electron');
 
+//arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
 ipcRenderer.on('windowname', (event, arg) => {
-  var window_name = arg[0];
-  var retrieve_object = localStorage.getItem(window_name);
-  console.log(retrieve_object);
+  console.log(arg);
 }
