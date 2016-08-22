@@ -10,10 +10,7 @@
       var caller_id = arg[2];
       var website = arg[3];
       var agent = arg[4];
-      $(document).ready(function(){
-        $('.tab-div').html('<webview id="1" src="' + url + '" style="display:inline-flex; width:640px; height:480px"></webview>');
-        $('.phone_number').html('Phone Number :' + caller_id);
-      });
+      console.log(url);
     });
 
 }());
