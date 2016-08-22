@@ -127,7 +127,7 @@ var notifier_api = function(funct_token, func_window) {
         height:600
       }
       if(caller_id == '444' || (caller_id.length > 5 && caller_id.indexOf('*') == -1)){
-        var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url]);
+        var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, agent]);
       }
       // Create a new window
 

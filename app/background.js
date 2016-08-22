@@ -70,9 +70,11 @@ app.on('ready', function () {
         height:600,
         webPreferences: {nodeIntegration:false}
       }
-      //arg[0] => token, arg[1] => url
+      //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
       var new_window = createWindow('new_window_' + arg[0], new_window_options);
       new_window.loadURL(arg[1]);
+      var form_object = { 'token': arg[0], 'url': arg[1], 'caller_id': arg[2], 'website': arg[3], 'agent': arg[4] };
+      localStorage.setItem('new_window_' + arg[0], JSON.stringify(testObject));
       new_window.on('close', function(event_close){
         new_window.webContents.executeJavaScript(
           `
