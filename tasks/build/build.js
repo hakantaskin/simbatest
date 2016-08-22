@@ -22,7 +22,6 @@ var paths = {
         './node_modules/**',
         './helpers/**',
         './call/**',
-        './form/**',
         './**/*.html',
         './**/*.+(jpg|png|svg)',
         './**/stylesheets/**',
