@@ -1,10 +1,7 @@
-const remote = require('electron').remote;
-const app = remote.app;
+const { ipcRenderer, ipcMain } = require('electron');
 
-console.log(app);
-
-var caller_id = "";
-var agent = "";
-var token = "";
-
-var retrive_object = localStorage.getItem();
+ipcMain.on('windowname', (event, arg) => {
+  var window_name = arg[0];
+  var retrieve_object = localStorage.getItem(window_name);
+  console.log(retrieve_object);
+}

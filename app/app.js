@@ -1,6 +1,6 @@
 const remote = require('electron').remote;
 const app = remote.app;
-const {ipcRenderer} = require('electron');
+const { ipcRenderer, ipcMain } = require('electron');
 import createWindow from './helpers/window';
 import { get_website, url_generate, get_clean_caller_id, error_log, info_log } from './helpers/quick';
 import jetpack from 'fs-jetpack';
