@@ -27,9 +27,9 @@ if(site == undefined) {
 var mainWindow;
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
-    if (env.name !== 'production') {
+    //if (env.name !== 'production') {
         menus.push(devMenuTemplate);
-    }
+    //}
     menus.push(prodMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
@@ -41,7 +41,7 @@ app.on('ready', function () {
     var options = {
       width: 1000,
       height:600,
-      show:false
+      show:true
     }
 
     var mainWindow = createWindow('main', options);
@@ -72,7 +72,7 @@ app.on('ready', function () {
       }
       //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
       var new_window = createWindow('new_window_' + arg[0], new_window_options);
-      new_window.loadURL(arg[1]);
+      new_window.loadURL('file://' + __dirname + '/form.html';);
       ipcRenderer.send('windowname', ['new_window_' + arg[0]]);
       var form_object = { 'token': arg[0], 'url': arg[1], 'caller_id': arg[2], 'website': arg[3], 'agent': arg[4] };
       localStorage.setItem('new_window_' + arg[0], JSON.stringify(testObject));
