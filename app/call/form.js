@@ -19,6 +19,6 @@
         console.log("burada 2");
         document.getElementByClassName('tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:640px; height:480px"></webview>';
         document.getElementByClassName('phone_number').innerHTML = 'Phone Number :' + caller_id;
-      }
+      });
     }
 }());
