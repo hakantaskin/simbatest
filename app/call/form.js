@@ -10,9 +10,7 @@
       var caller_id = arg[2];
       var website = arg[3];
       var agent = arg[4];
-      document.addEventListener('DOMContentLoaded', function () {
-        document.getElementByClassName('tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:640px; height:480px"></webview>';
-        document.getElementByClassName('phone_number').innerHTML = 'Phone Number :' + caller_id;
-      });
+      document.getElementByClassName('tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:640px; height:480px"></webview>';
+      document.getElementByClassName('phone_number').innerHTML = 'Phone Number :' + caller_id;
     });
 }());
