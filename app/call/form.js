@@ -15,7 +15,7 @@
 
     var prepare = function(url, caller_id){
       console.log("burada");
-      document.querySelector('.tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:100%; height:1000px; overflow:hidden;"></webview>';
+      document.querySelector('.tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
     }
 }());
