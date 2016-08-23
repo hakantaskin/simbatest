@@ -16,6 +16,10 @@
         $('.tab_div_' + data_id).show();
       }
     }
+
+    function close_tab(data_id){
+      console.log("data id:" + data_id);
+    }
     </script>
 </head>
 <body>
@@ -25,7 +29,7 @@
 
   <div class="tab-group">
     <div class="tab-item tab_group active" onclick="tab_group_click(1)" data-id="1">
-      <span class="icon icon-cancel icon-close-tab" onclick="console.log('kapat 1')"></span> Form
+      <span class="icon icon-cancel icon-close-tab"></span> Form
     </div>
     <div class="tab-item tab-item-fixed">
       <span class="icon icon-plus"></span>

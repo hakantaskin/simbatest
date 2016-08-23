@@ -4,7 +4,6 @@
     'use strict';
     var config = require('./../stylesheets/js/config');
     var { ipcRenderer, shell } = require('electron');
-    var webview = document.getElementById('webview_show');
     var token = "";
     var url = "";
     var caller_id = "";
@@ -15,13 +14,6 @@
     var last_tab_div = "";
     var tab_group_last_attr_id = "";
     var new_data_id = "";
-
-    webview.addEventListener('new-window', (e) => {
-      const protocol = require('url').parse(e.url).protocol
-      if (protocol === 'http:' || protocol === 'https:') {
-        shell.openExternal(e.url)
-      }
-    });
 
     //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
     ipcRenderer.on('windowname', (event, arg) => {
@@ -40,13 +32,23 @@
           tab_group_last_attr_id = tab_group_last.attr('data-id');
 
           new_data_id = (parseInt(tab_group_last_attr_id) + 1);
-          tab_group_last.after('<div class="tab-item tab_group" onclick="tab_group_click('+new_data_id+')" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab"></span> Tatil.com Search</div>');
+          tab_group_last.after('<div class="tab-item tab_group" onclick="tab_group_click('+new_data_id+')" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab" onclick="close_tab('+new_data_id+')"></span> Tatil.com Search</div>');
           last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="webview_show" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
           $('.tab_group').removeClass('active');
           $('div[class*="tab_div_"]').hide();
           $('.tab_group').last().addClass('active');
           $('.tab_div_' + new_data_id).show();
         });
+
+        var webview = document.getElementById('webview_show');
+
+        webview.addEventListener('new-window', (e) => {
+        const protocol = require('url').parse(e.url).protocol
+        if (protocol === 'http:' || protocol === 'https:') {
+          shell.openExternal(e.url)
+        }
+        });
+        
       });
       prepare(url, caller_id);
     });
@@ -56,6 +58,4 @@
       document.querySelector('.tab_div_1').innerHTML = '<webview id="webview_show" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
     }
-
-
 }());
