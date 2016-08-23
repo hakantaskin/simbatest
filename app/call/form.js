@@ -9,6 +9,11 @@
     var caller_id = "";
     var website = "";
     var agent = "";
+    var tatilcom_url = "";
+    var tag_group_last = "";
+    var last_tab_div = "";
+    var tab_group_last_attr_id = "";
+    var new_data_id = "";
 
     //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
     ipcRenderer.on('windowname', (event, arg) => {
