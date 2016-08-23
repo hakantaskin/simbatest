@@ -12,7 +12,7 @@
       if (data_id != null && data_id != 'undefined'){
         $('.tab_group').removeClass('active');
         $('div[class*="tab_div_"]').hide();
-        $(this).addClass('active');
+        $('div[data-id="'+data_id+'"]').addClass('active');
         $('.tab_div_' + data_id).show();
       }
     }
@@ -25,7 +25,7 @@
 
   <div class="tab-group">
     <div class="tab-item tab_group active" onclick="tab_group_click(1)" data-id="1">
-      <span class="icon icon-cancel icon-close-tab"></span> Form
+      <span class="icon icon-cancel icon-close-tab" onclick="console.log('kapat 1')"></span> Form
     </div>
     <div class="tab-item tab-item-fixed">
       <span class="icon icon-plus"></span>
