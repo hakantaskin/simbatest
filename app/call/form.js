@@ -6,6 +6,7 @@
     var { ipcRenderer } = require('electron');
     //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
     ipcRenderer.on('windowname', (event, arg) => {
+      var token = arg[0];
       var url = arg[1];
       var caller_id = arg[2];
       var website = arg[3];
@@ -18,4 +19,33 @@
       document.querySelector('.tab_div').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
     }
+
+    $(document).ready(function(){
+      $('.icon-plus').click(function(){
+        tatilcom_url = 'http://www.tatil.com?callcenter_refid='+token+'&callcenter_staffid='+agent+'&callcenter_callerid='+caller_id;
+        tab_group_last = $('.tab_group').last();
+        last_tab_div = $('div[class*="tab_div_"]').last();
+        tab_group_last_attr_id = tab_group_last.attr('data-id');
+
+        new_data_id = (parseInt(tab_group_last_attr_id) + 1);
+        tab_group_last.after('<div class="tab-item tab_group" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab"></span></div>');
+        last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="1" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
+        $('.tab_group').removeClass('activate');
+        $('div[class*="tab_div_"]').hide();
+        $('.tab_group').last().addClass('activate');
+        $('.tab_div_' + new_data_id).show();
+      });
+
+      $('.tab_group').click(function(){
+        data_id = $(this).attr('data-id');
+        if (data_id != null && data_id != 'undefined') {
+          $('.tab_group').removeClass('activate');
+          $('div[class*="tab_div_"]').hide();
+          $(this).addClass('activate');
+          $('.tab_div_' + data_id).show();
+        }
+      });
+
+
+    });
 }());
