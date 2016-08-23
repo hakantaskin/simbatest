@@ -3,7 +3,8 @@
 (function () {
     'use strict';
     var config = require('./../stylesheets/js/config');
-    var { ipcRenderer } = require('electron');
+    var { ipcRenderer, shell } = require('electron');
+    var webview = document.getElementById('webview_show');
     var token = "";
     var url = "";
     var caller_id = "";
@@ -14,6 +15,13 @@
     var last_tab_div = "";
     var tab_group_last_attr_id = "";
     var new_data_id = "";
+
+    webview.addEventListener('new-window', (e) => {
+      const protocol = require('url').parse(e.url).protocol
+      if (protocol === 'http:' || protocol === 'https:') {
+        shell.openExternal(e.url)
+      }
+    });
 
     //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
     ipcRenderer.on('windowname', (event, arg) => {
@@ -33,7 +41,7 @@
 
           new_data_id = (parseInt(tab_group_last_attr_id) + 1);
           tab_group_last.after('<div class="tab-item tab_group" onclick="tab_group_click('+new_data_id+')" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab"></span> Tatil.com Search</div>');
-          last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="1" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
+          last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="webview_show" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
           $('.tab_group').removeClass('active');
           $('div[class*="tab_div_"]').hide();
           $('.tab_group').last().addClass('active');
@@ -45,7 +53,7 @@
 
     var prepare = function(url, caller_id){
       console.log("burada");
-      document.querySelector('.tab_div_1').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
+      document.querySelector('.tab_div_1').innerHTML = '<webview id="webview_show" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
     }
 
