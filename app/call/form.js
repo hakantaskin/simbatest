@@ -58,5 +58,5 @@
         $(this).addClass('active');
         $('.tab_div_' + data_id).show();
       }
-    });
+    }
 }());
