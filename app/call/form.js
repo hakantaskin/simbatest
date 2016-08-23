@@ -21,7 +21,8 @@
     }
 
     $(document).ready(function(){
-      $('.icon-plus').click(function(){
+      $('.tab-item-fixed').click(function(){
+        console.log("tab_item_fixed_click");
         tatilcom_url = 'http://www.tatil.com?callcenter_refid='+token+'&callcenter_staffid='+agent+'&callcenter_callerid='+caller_id;
         tab_group_last = $('.tab_group').last();
         last_tab_div = $('div[class*="tab_div_"]').last();
@@ -37,7 +38,8 @@
       });
 
       $('.tab_group').click(function(){
-        data_id = $(this).attr('data-id');
+        var data_id = $(this).attr('data-id');
+        console.log("data_id : " + data_id);
         if (data_id != null && data_id != 'undefined') {
           $('.tab_group').removeClass('activate');
           $('div[class*="tab_div_"]').hide();
