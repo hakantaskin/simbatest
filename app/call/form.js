@@ -10,7 +10,7 @@
     var website = "";
     var agent = "";
     var tatilcom_url = "";
-    var tag_group_last = "";
+    var tab_group_last = "";
     var last_tab_div = "";
     var tab_group_last_attr_id = "";
     var new_data_id = "";
