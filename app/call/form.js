@@ -4,20 +4,19 @@
     'use strict';
     var config = require('./../stylesheets/js/config');
     var { ipcRenderer } = require('electron');
+    var token = "";
+    var url = "";
+    var caller_id = "";
+    var website = "";
+    var agent = "";
+
     //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
     ipcRenderer.on('windowname', (event, arg) => {
-      var token = arg[0];
-      var url = arg[1];
-      var caller_id = arg[2];
-      var website = arg[3];
-      var agent = arg[4];
-      prepare(url, caller_id);
-    });
-
-    var prepare = function(url, caller_id){
-      console.log("burada");
-      document.querySelector('.tab_div_1').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
-      document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
+      token = arg[0];
+      url = arg[1];
+      caller_id = arg[2];
+      website = arg[3];
+      agent = arg[4];
 
       $(document).ready(function(){
         $('.tab-item-fixed').click(function(){
@@ -46,8 +45,14 @@
             $('.tab_div_' + data_id).show();
           }
         });
-
-
       });
+
+      prepare(url, caller_id);
+    });
+
+    var prepare = function(url, caller_id){
+      console.log("burada");
+      document.querySelector('.tab_div_1').innerHTML = '<webview id="1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
+      document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
     }
 }());
