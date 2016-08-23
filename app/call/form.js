@@ -32,24 +32,12 @@
           tab_group_last_attr_id = tab_group_last.attr('data-id');
 
           new_data_id = (parseInt(tab_group_last_attr_id) + 1);
-          tab_group_last.after('<div class="tab-item tab_group" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab"></span> Tatil.com Search</div>');
+          tab_group_last.after('<div class="tab-item tab_group" onclick="tab_group_click('+new_data_id+')" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab"></span> Tatil.com Search</div>');
           last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="1" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
           $('.tab_group').removeClass('active');
           $('div[class*="tab_div_"]').hide();
           $('.tab_group').last().addClass('active');
           $('.tab_div_' + new_data_id).show();
-        });
-
-        $('.tab_group').click(function(){
-          console.log("click .tab_group");
-          var data_id = $(this).attr('data-id');
-          console.log("data_id : " + data_id);
-          if (data_id != null && data_id != 'undefined'){
-            $('.tab_group').removeClass('active');
-            $('div[class*="tab_div_"]').hide();
-            $(this).addClass('active');
-            $('.tab_div_' + data_id).show();
-          }
         });
       });
       prepare(url, caller_id);
