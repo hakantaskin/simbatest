@@ -41,7 +41,7 @@ app.on('ready', function () {
     var options = {
       width: 1000,
       height:600,
-      show:true
+      show:false
     }
 
     var mainWindow = createWindow('main', options);

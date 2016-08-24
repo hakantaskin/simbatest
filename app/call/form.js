@@ -4,6 +4,9 @@
     'use strict';
     var config = require('./../stylesheets/js/config');
     var { ipcRenderer, shell } = require('electron');
+    var fs = require('fs');
+    var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
+    var site_file = 'site.txt';
     var token = "";
     var url = "";
     var caller_id = "";
@@ -45,6 +48,16 @@
             console.log('new_window_eventttt');
             webview_show.src = e.url;
           });
+        });
+
+        fs.readFile(simba_file_path + site_file, function (err, site) {
+          if (err != null){
+            console.log(err);
+          } else {
+            if(site == 2){
+              $('.tab_group').last().after('<div class="tab-item tab-item-fixed"><span class="icon icon-plus"></span></div>');
+            }
+          }
         });
       });
       prepare(url, caller_id);
