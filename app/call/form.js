@@ -70,7 +70,7 @@
       window.onbeforeunload = function(e) {
         webview_show_1.executeJavaScript(`
           if(document.querySelector('#fade-quote-carousel') == null) {
-              alert("Formu doldurunuz.");
+              alert("Formu doldurunuz. - form.js");
           };`, false, function(result){
           console.log(result);
         });
