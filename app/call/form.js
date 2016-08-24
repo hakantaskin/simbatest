@@ -27,6 +27,15 @@
       agent = arg[4];
 
       $(document).ready(function(){
+        fs.readFile(simba_file_path + site_file, function (err, site) {
+          if (err != null){
+            console.log(err);
+          } else {
+            if(site != 2){
+              $('.tab-item-fixed').remove();
+            }
+          }
+        });
         $('.tab-item-fixed').click(function(){
           console.log("tab_item_fixed_click");
           tatilcom_url = 'http://www.tatil.com?callcenter_refid='+token+'&callcenter_staffid='+agent+'&callcenter_callerid='+caller_id;
@@ -48,17 +57,6 @@
             console.log('new_window_eventttt');
             webview_show.src = e.url;
           });
-        });
-
-        fs.readFile(simba_file_path + site_file, function (err, site) {
-          if (err != null){
-            console.log(err);
-          } else {
-            console.log('site: ' + site);
-            if(site == 2){
-              $('.tab_group').last().after('<div class="tab-item tab-item-fixed"><span class="icon icon-plus"></span></div>');
-            }
-          }
         });
       });
       prepare(url, caller_id);
