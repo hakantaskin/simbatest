@@ -39,11 +39,11 @@
           $('.tab_group').last().addClass('active');
           $('.tab_div_' + new_data_id).show();
 
-          var webview1 = document.getElementById('webview_show_2');
+          var webview_show = document.getElementById('webview_show_' + new_data_id);
 
-          webview1.addEventListener('new-window', (e) => {
-            console.log('new_window_eventttt');
-            webview1.src = e.url;
+          webview_show.addEventListener('new-window', (e) => {
+            console.log('new_window_eventttt' + new_data_id);
+            webview_show.src = e.url;
           });
         });
 
