@@ -26,9 +26,8 @@
       $('.tab_group').removeClass('active');
       $('div[class*="tab_div_"]').hide();
       tab_group = $('.tab_group').last();
-      console.log(tab_group);
-      tab_group.addClass('active');
       tab_group_data_id = tab_group.attr('data-id');
+      $('div[data-id="'+tab_group_data_id+'"]').addClass('active');
       console.log("Tab Group Data Id:" + tab_group_data_id);
       $('.tab_div_' + tab_group_data_id).show();
     }
