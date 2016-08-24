@@ -66,14 +66,5 @@
     var prepare = function(url, caller_id){
       document.querySelector('.tab_div_1').innerHTML = '<webview id="webview_show_1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
-      var webview_show_1 = $('#webview_show_1');
-      window.onbeforeunload = function(e) {
-        webview_show_1.executeJavaScript(`
-          if(document.querySelector('#fade-quote-carousel') == null) {
-              alert("Formu doldurunuz. - form.js");
-          };`, false, function(result){
-          console.log(result);
-        });
-      }
     }
 }());
