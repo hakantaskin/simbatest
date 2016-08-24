@@ -18,7 +18,15 @@
     }
 
     function close_tab(data_id){
-      console.log("data id:" + data_id);
+      console.log("close tab data id:" + data_id);
+      $('div[data-id="'+data_id+'"]').remove();
+      $('.tab_div_' + data_id).remove();
+      if(data_id > 1) {
+        $('.tab_group').removeClass('active');
+        $('div[class*="tab_div_"]').hide();
+        $('div[data-id="'+(parseInt(data_id) - 1)+'"]').addClass('active');
+        $('.tab_div_' + (parseInt(data_id) - 1)).show();
+      }
     }
     </script>
 </head>
