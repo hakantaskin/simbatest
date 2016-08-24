@@ -31,6 +31,7 @@
           if (err != null){
             console.log(err);
           } else {
+            console.log("siteid:" + site);
             if(site != 2){
               $('.tab-item-fixed').remove();
             }
