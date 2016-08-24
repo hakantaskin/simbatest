@@ -46,12 +46,6 @@
             webview_show.src = e.url;
           });
         });
-
-        var webview = document.getElementById('webview_show');
-        webview.addEventListener('new-window', (e) => {
-          console.log('new_window');
-        });
-
       });
       prepare(url, caller_id);
     });
