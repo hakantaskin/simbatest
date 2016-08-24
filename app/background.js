@@ -67,8 +67,7 @@ app.on('ready', function () {
     ipcMain.on('newwindow', (event, arg) => {
       var new_window_options = {
         width: 1200,
-        height:600,
-        fullscreen:true
+        height:600
       }
       //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
       var new_window = createWindow('new_window_' + arg[0], new_window_options);
@@ -81,7 +80,8 @@ app.on('ready', function () {
           `
           window.onbeforeunload = function(e) {
             var webview_selector = document.querySelector('webview');
-            if(webview_selector != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
+            console.log(webview_selector.attr('src'));
+            if(webview_selector.attr('src') != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
                 alert("Formu doldurunuz. - background.js");
                 return false;
             };

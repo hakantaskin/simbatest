@@ -54,6 +54,7 @@
           if (err != null){
             console.log(err);
           } else {
+            console.log('site: ' + site);
             if(site == 2){
               $('.tab_group').last().after('<div class="tab-item tab-item-fixed"><span class="icon icon-plus"></span></div>');
             }
