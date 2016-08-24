@@ -33,13 +33,13 @@
 
           new_data_id = (parseInt(tab_group_last_attr_id) + 1);
           tab_group_last.after('<div class="tab-item tab_group" onclick="tab_group_click('+new_data_id+')" data-id="' + new_data_id + '"><span class="icon icon-cancel icon-close-tab" onclick="close_tab('+new_data_id+')"></span> Tatil.com Search</div>');
-          last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="webview_show_'+new_data_id+'" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
+          last_tab_div.after('<div class="tab_div_' + new_data_id + '" style="display:none;"><webview id="webview_show" src="' + tatilcom_url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview></div>');
           $('.tab_group').removeClass('active');
           $('div[class*="tab_div_"]').hide();
           $('.tab_group').last().addClass('active');
           $('.tab_div_' + new_data_id).show();
 
-          var webview_show = document.getElementById('webview_show_' + new_data_id);
+          var webview_show = document.getElementById('webview_show');
 
           webview_show.addEventListener('new-window', (e) => {
             console.log('new_window_eventttt' + new_data_id);
@@ -58,7 +58,7 @@
 
     var prepare = function(url, caller_id){
       console.log("burada");
-      document.querySelector('.tab_div_1').innerHTML = '<webview id="webview_show" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
+      document.querySelector('.tab_div_1').innerHTML = '<webview id="webview_show_1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
     }
 }());
