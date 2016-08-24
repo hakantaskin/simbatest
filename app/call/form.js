@@ -39,7 +39,7 @@
           $('.tab_group').last().addClass('active');
           $('.tab_div_' + new_data_id).show();
 
-          var webview_show = document.getElementById('webview_show' + new_data_id);
+          var webview_show = document.getElementById('webview_show_' + new_data_id);
 
           webview_show.addEventListener('new-window', (e) => {
             console.log('new_window_eventttt');
