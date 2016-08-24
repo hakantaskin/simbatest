@@ -80,8 +80,8 @@ app.on('ready', function () {
           `
           window.onbeforeunload = function(e) {
             var webview_selector = document.querySelector('webview');
-            console.log(webview_selector.attr('src'));
-            if(webview_selector.attr('src') != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
+            alert(webview_selector.src);
+            if(webview_selector.src != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
                 alert("Formu doldurunuz. - background.js");
                 return false;
             };
