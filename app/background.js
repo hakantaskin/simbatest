@@ -75,18 +75,6 @@ app.on('ready', function () {
       new_window.webContents.on('did-finish-load', () => {
           new_window.webContents.send('windowname', [arg[0], arg[1], arg[2], arg[3], arg[4]]);
       });
-      new_window.on('close', function(event_close){
-        new_window.webContents.executeJavaScript(
-          `
-          window.onbeforeunload = function(e) {
-            if(document.querySelector('#fade-quote-carousel') == null) {
-                alert("Formu doldurunuz.");
-                return false;
-            };
-          }
-          `
-        );
-      });
     });
 });
 
