@@ -58,6 +58,19 @@
             webview_show.src = e.url;
           });
         });
+        window.onbeforeunload = function(e) {
+          webview_show_1 = $('#webview_show_1');
+          webview_show_1.executeJavaScript(`
+          window.onbeforeunload = function(e) {
+            var webview_selector = document.querySelector('webview');
+            alert(webview_selector.src);
+            if(webview_selector.src != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
+                alert("Formu doldurunuz. - form.js");
+                return false;
+            };
+          }
+          `);
+        }
       });
       prepare(url, caller_id);
     });
