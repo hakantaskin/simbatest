@@ -21,12 +21,12 @@
       console.log("close tab data id:" + data_id);
       $('div[data-id="'+data_id+'"]').remove();
       $('.tab_div_' + data_id).remove();
-      if(data_id > 1) {
-        $('.tab_group').removeClass('active');
-        $('div[class*="tab_div_"]').hide();
-        $('div[data-id="'+(parseInt(data_id) - 1)+'"]').addClass('active');
-        $('.tab_div_' + (parseInt(data_id) - 1)).show();
-      }
+      $('.tab_group').removeClass('active');
+      $('div[class*="tab_div_"]').hide();
+      var tab_group = $('.tab_group').last();
+      var tab_group_data_id = tab_group.attr('data-id');
+      tab_group.addClass('active');
+      $('.tab_div_' + (tab_group_data_id)).show();
     }
     </script>
 </head>
