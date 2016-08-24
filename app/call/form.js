@@ -43,6 +43,7 @@
 
           webview1.addEventListener('new-window', (e) => {
             console.log('new_window_eventttt');
+            webview1.src = e.url;
           });
         });
 
