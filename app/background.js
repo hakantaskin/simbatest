@@ -76,6 +76,7 @@ app.on('ready', function () {
       new_window.loadURL('file://' + __dirname + '/views/form.html');
       new_window.webContents.on('did-finish-load', () => {
           new_window.webContents.send('windowname', [arg[0], arg[1], arg[2], arg[3], arg[4]]);
+          new_window.webContents.executeJavaScript(`$('a[target="tatil_search"]').remove();`);
       });
       new_window.on('close', function(event_close){
         new_window.webContents.executeJavaScript(

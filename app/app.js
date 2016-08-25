@@ -130,7 +130,6 @@ var notifier_api = function(funct_token, func_window) {
         var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
       }
       // Create a new window
-
   }
 };
 
