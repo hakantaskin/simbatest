@@ -1,6 +1,6 @@
 const remote = require('electron').remote;
 const app = remote.app;
-const {ipcRenderer} = require('electron');
+const { ipcRenderer, ipcMain } = require('electron');
 import createWindow from './helpers/window';
 import { get_website, url_generate, get_clean_caller_id, error_log, info_log } from './helpers/quick';
 import jetpack from 'fs-jetpack';
@@ -111,7 +111,7 @@ var notifier_api = function(funct_token, func_window) {
 
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      info_log('Conn ID: ' + last_conn_id + ' / Token: '+ token +' / Simba calllogs post ok.');
+      info_log('Conn ID: ' + last_conn_id + ' / Token: '+ funct_token +' / Simba calllogs post ok.');
     } else {
       error_log("Server error status code : " + response.statusCode);
     }
@@ -127,10 +127,9 @@ var notifier_api = function(funct_token, func_window) {
         height:600
       }
       if(caller_id == '444' || (caller_id.length > 5 && caller_id.indexOf('*') == -1)){
-        var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url]);
+        var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
       }
       // Create a new window
-
   }
 };
 

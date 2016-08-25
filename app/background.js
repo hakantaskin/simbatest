@@ -27,9 +27,9 @@ if(site == undefined) {
 var mainWindow;
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
-    if (env.name !== 'production') {
+    //if (env.name !== 'production') {
         menus.push(devMenuTemplate);
-    }
+    //}
     menus.push(prodMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
@@ -67,17 +67,23 @@ app.on('ready', function () {
     ipcMain.on('newwindow', (event, arg) => {
       var new_window_options = {
         width: 1200,
-        height:600,
-        webPreferences: {nodeIntegration:false}
+        height:600
       }
-      //arg[0] => token, arg[1] => url
+
+      //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
       var new_window = createWindow('new_window_' + arg[0], new_window_options);
-      new_window.loadURL(arg[1]);
+      new_window.maximize();
+      new_window.loadURL('file://' + __dirname + '/views/form.html');
+      new_window.webContents.on('did-finish-load', () => {
+          new_window.webContents.send('windowname', [arg[0], arg[1], arg[2], arg[3], arg[4]]);
+      });
       new_window.on('close', function(event_close){
         new_window.webContents.executeJavaScript(
           `
           window.onbeforeunload = function(e) {
-            if(document.querySelector('#fade-quote-carousel') == null) {
+            var webview_selector = document.querySelector('webview');
+            var src = webview_selector.src;
+            if(src.indexOf('http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/') != -1) {
                 alert("Formu doldurunuz.");
                 return false;
             };
