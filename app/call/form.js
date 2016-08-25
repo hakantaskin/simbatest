@@ -61,13 +61,14 @@
         window.onbeforeunload = function(e) {
           webview_show_1 = $('#webview_show_1');
           webview_show_1.executeJavaScript(`
-          window.onbeforeunload = function(e) {
-            var webview_selector = document.querySelector('webview');
-            if(webview_selector.src != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
-                alert("Formu doldurunuz.");
-                return false;
-            };
-          }
+            window.onbeforeunload = function(e) {
+              var webview_selector = document.querySelector('webview');
+              var src = webview_selector.src;
+              if(src.indexOf('http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/')) {
+                  alert("Formu doldurunuz.");
+                  return false;
+              };
+            }
           `);
         }
       });

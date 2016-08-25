@@ -67,10 +67,12 @@ app.on('ready', function () {
     ipcMain.on('newwindow', (event, arg) => {
       var new_window_options = {
         width: 1200,
-        height:600
+        height:600:
       }
+
       //arg[0] => token, arg[1] => url, 2 => caller_id , 3 => website, 4 => agent
       var new_window = createWindow('new_window_' + arg[0], new_window_options);
+      new_window.maximize();
       new_window.loadURL('file://' + __dirname + '/views/form.html');
       new_window.webContents.on('did-finish-load', () => {
           new_window.webContents.send('windowname', [arg[0], arg[1], arg[2], arg[3], arg[4]]);
@@ -80,7 +82,8 @@ app.on('ready', function () {
           `
           window.onbeforeunload = function(e) {
             var webview_selector = document.querySelector('webview');
-            if(webview_selector.src != 'http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/InsertSubmit') {
+            var src = webview_selector.src;
+            if(src.indexOf('http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/')) {
                 alert("Formu doldurunuz.");
                 return false;
             };
