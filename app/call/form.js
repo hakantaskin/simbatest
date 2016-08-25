@@ -64,7 +64,7 @@
             window.onbeforeunload = function(e) {
               var webview_selector = document.querySelector('webview');
               var src = webview_selector.src;
-              if(src.indexOf('http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/')) {
+              if(src.indexOf('http://metcase.metglobaltech.com/staff/index.php?/Mettask/Ticket/CallCenter/') == -1) {
                   alert("Formu doldurunuz.");
                   return false;
               };
