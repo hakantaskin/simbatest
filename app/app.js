@@ -40,33 +40,35 @@ var watch_file = function (){
       user_name = get_user_name();
       var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
       var new_conn_id = get_last_conn_id();
-      if(new_conn_id != last_conn_id) {
-        token_generate_is_running[new_conn_id] = true;
-        token_generate_is_running.join();
-        info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-        last_conn_id = get_last_conn_id();
-        http.get(temp_api_token, (res) => {
-          res.on("data", function(chunk) {
-            new_token = chunk;
-            info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
-            var index = token_generate_is_running.indexOf(new_conn_id);
-            if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
-              token_generate_is_running.splice(new_conn_id, 1);
-            }
-            notifier_api(new_token, 'open');
+      if(new_conn_id != -1){
+        if(new_conn_id != last_conn_id) {
+          token_generate_is_running[new_conn_id] = true;
+          token_generate_is_running.join();
+          info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+          last_conn_id = get_last_conn_id();
+          http.get(temp_api_token, (res) => {
+            res.on("data", function(chunk) {
+              new_token = chunk;
+              info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
+              var index = token_generate_is_running.indexOf(new_conn_id);
+              if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
+                token_generate_is_running.splice(new_conn_id, 1);
+              }
+              notifier_api(new_token, 'open');
+            });
+          }).on('error', (e) => {
+            error_log('Got error: ' + e.message);
           });
-        }).on('error', (e) => {
-          error_log('Got error: ' + e.message);
-        });
-      } else {
-        info_log('ELSE: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-        var  refreshIntervalId = setInterval(function(){
-          if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
-            clearInterval(refreshIntervalId);
-            info_log("Conn ID: " + new_conn_id + " / Clear Interval");
-            notifier_api(new_token, 'none');
-          }
-        },250);
+        } else {
+          info_log('ELSE: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+          var  refreshIntervalId = setInterval(function(){
+            if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
+              clearInterval(refreshIntervalId);
+              info_log("Conn ID: " + new_conn_id + " / Clear Interval");
+              notifier_api(new_token, 'none');
+            }
+          },250);
+        }
       }
     }
   });
