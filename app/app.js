@@ -9,6 +9,7 @@ import { get_caller_id, get_last_conn_id, get_user_name,
          get_log_files_url } from './call/xml';
 import env from './env';
 
+var os = require('os');
 var fs = require('fs');
 const http = require('http');
 var request = require('request');
@@ -34,6 +35,20 @@ var setApplicationMenu = function () {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
+var interfaces = os.networkInterfaces();
+var addresses = [];
+for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family === 'IPv4' && !address.internal) {
+            addresses.push(address.address);
+        }
+    }
+}
+var agentip = '';
+if(typeof addresses[0] != 'undefined'){
+  agentip = addresses[0];
+}
 var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
     if(event == 'change'){
@@ -101,6 +116,7 @@ var notifier_api = function(funct_token, func_window) {
   map_key = ["[agent]", "[token]"];
   map_value = [user_name, funct_token];
   temp_url = url_generate(env.api_url, map_key, map_value);
+
   var post_query = {
     "token": funct_token,
     "direction": last_direction,
@@ -108,7 +124,8 @@ var notifier_api = function(funct_token, func_window) {
     "agent": user_name,
     "timestamp": timestamp,
     "connection_id": last_conn_id,
-    "website": website
+    "website": website,
+    "agentip": agentip
   };
 
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
