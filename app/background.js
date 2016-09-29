@@ -16,8 +16,17 @@ const fs = require('fs');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 import env from './env';
 var site = jetpack.read( simba_file_path + 'site.txt', 'txt');
+var server_ip = jetpack.read( simba_file_path + 'server_ip.txt', 'txt');
 if(site == undefined) {
   fs.writeFile( simba_file_path + 'site.txt', '', (err) => {
+    if (err){
+      info_log(err);
+    }
+  });
+}
+
+if(server_ip == undefined) {
+  fs.writeFile( simba_file_path + 'server_ip.txt', 'http://172.22.3.199', (err) => {
     if (err){
       info_log(err);
     }
