@@ -27,6 +27,7 @@ var website = '';
 var new_token = '';
 var log_file = get_log_files_url();
 var token_generate_is_running = [];
+var open_window_token = '';
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
     if (env.name !== 'production') {
@@ -98,7 +99,7 @@ var notifier_api = function(funct_token, func_window) {
   var map_key = [];
   var map_value = [];
 
-  caller_id = get_caller_id();
+  caller_id = get_caller_id(last_conn_id);
   user_name = get_user_name();
   last_direction = get_last_direction();
   website = get_website(site);
@@ -135,20 +136,22 @@ var notifier_api = function(funct_token, func_window) {
       error_log("Server error status code : " + response.statusCode);
     }
   });
+  if(caller_id != ''){
+    var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
+    var map_screen_value = [caller_id, site, funct_token];
 
-  var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
-  var map_screen_value = [caller_id, site, funct_token];
-
-  var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-  if (func_window == 'open') {
-      var call_screen_options = {
-        width: 800,
-        height:600
-      }
-      if(caller_id == '444' || (caller_id.length > 5 && caller_id.indexOf('*') == -1)){
-        var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
-      }
-      // Create a new window
+    var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
+    open_window_token = "callerid_" + caller_id + "_connectionid_" + last_conn_id;
+    if(open_window_token = "callerid_" + caller_id + "_connectionid_" + last_conn_id) {
+        var call_screen_options = {
+          width: 800,
+          height:600
+        }
+        if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
+          var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
+        }
+        // Create a new window
+    }
   }
 };
 

@@ -6,15 +6,15 @@ var parser = new xml2js.Parser();
 var files = "\\Avaya\\Avaya one-X Communicator\\";
 var log_files = "\\Avaya\\Avaya one-X Communicator\\Log Files\\";
 
-export var get_caller_id = function () {
-  var file_name = 'onexcapi.txt';
-  var path = app.getPath('appData'); // appData ile degisecek
-  var src = jetpack.cwd(path + log_files);
-  var data = src.read(file_name, 'txt');
+var get_caller_id_parse = function (data) {
   var callerids = [];
   var i = 0;
   var caller_id = '';
-  var result = data.match(/<remoteAddress>(.*?)<\/remoteAddress>/g).map(function(val){
+  var result = data.match(/<remoteAddress>(.*?)<\/remoteAddress>/g);
+  if(result == null){
+    return '';
+  }
+  result.map(function(val){
     if(val.length > 0){
       callerids[i] = val.replace(/<\/?remoteAddress>/g,'');
       i++;
@@ -24,13 +24,173 @@ export var get_caller_id = function () {
       caller_id = callerids[(callerids.length - 1)];
       caller_id = caller_id.replace('@', '');
       caller_id = caller_id.replace('+', '');
-      return caller_id;
   } else {
     info_log('callerid not found');
-    return caller_id;
+  }
+  return caller_id;
+};
+
+export var get_caller_id = function (last_conn_id) {
+  var file_name = 'onexcapi.txt';
+  var path = app.getPath('appData');
+  var src = jetpack.cwd(path + log_files);
+  var data = src.read(file_name, 'txt');
+  var callerids = [];
+  var connection_ids = [];
+  var last_connection_id = 0;
+  var i = 0;
+  var connectionId_i = 0;
+  var caller_id = '';
+  var caller_id_last_string = '';
+  var incoming_strings = [];
+  var incoming_last_string = '';
+  var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g).map(function(val){
+    if(val.length > 0){
+      incoming_strings[i] = val;
+      i++;
+    }
+  });
+  if(incoming_strings.length > 0){
+    incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
+    if(incoming_last_string != ''){
+      var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
+        if(val_connection.length > 0){
+          connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+          connectionId_i++;
+        }
+      });
+      if(connection_ids.length > 0){
+        if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
+            last_connection_id = connection_ids[(connection_ids.length - 1)];
+            caller_id_last_string = incoming_last_string;
+            caller_id = get_caller_id_parse(caller_id_last_string);
+            if(caller_id != '' && caller_id != '444'){
+              return caller_id;
+            }
+        }
+        var caller_id_2 = get_caller_id_2(last_conn_id);
+        if(caller_id_2 != ''){
+          last_connection_id = connection_ids[(connection_ids.length - 1)];
+          caller_id_last_string = caller_id_2;
+          caller_id = get_caller_id_parse(caller_id_last_string);
+          if(caller_id != '' && caller_id != '444'){
+            return caller_id;
+          }
+        }
+        var caller_id_3 = get_caller_id_3(last_conn_id)
+        if(caller_id != '' && caller_id != '444'){
+          last_connection_id = connection_ids[(connection_ids.length - 1)];
+          caller_id_last_string = caller_id_3;
+          caller_id = get_caller_id_parse(caller_id_last_string);
+          if(caller_id != ''){
+            return caller_id;
+          }
+        }
+      } else {
+        info_log('connection id not found');
+      }
+    }
+  }
+  return caller_id;
+};
+
+var get_caller_id_2 = function (last_conn_id) {
+  var file_name = 'onexcapi.txt';
+  var path = app.getPath('documents'); // appData ile degisecek
+  var src = jetpack.cwd(path + log_files);
+  var data = src.read(file_name, 'txt');
+  var callerids = [];
+  var connection_ids = [];
+  var last_connection_id = 0;
+  var i = 0;
+  var connectionId_i = 0;
+  var caller_id = '';
+  var caller_id_last_string = '';
+  var incoming_strings = [];
+  var incoming_last_string = '';
+  var result = data.match(/<SessionCreatedEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/SessionCreatedEvent>/g);
+  if(result == null){
+    return '';
+  }
+  result.map(function(val){
+    if(val.length > 0){
+      incoming_strings[i] = val;
+      i++;
+    }
+  });
+  if(incoming_strings.length > 0){
+    incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
+    if(incoming_last_string != ''){
+      var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
+        if(val_connection.length > 0){
+          connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+          connectionId_i++;
+        }
+      });
+      if(connection_ids.length > 0){
+        if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
+            last_connection_id = connection_ids[(connection_ids.length - 1)];
+            caller_id_last_string = incoming_last_string;
+        }
+      } else {
+        info_log('connection id not found');
+      }
+    }
   }
 
-};
+  return caller_id_last_string;
+}
+
+var get_caller_id_3 = function (last_conn_id) {
+  var file_name = 'onexcapi.txt';
+  var path = app.getPath('documents'); // appData ile degisecek
+  var src = jetpack.cwd(path + log_files);
+  var data = src.read(file_name, 'txt');
+  var callerids = [];
+  var connection_ids = [];
+  var last_connection_id = 0;
+  var i = 0;
+  var connectionId_i = 0;
+  var caller_id = '';
+  var caller_id_last_string = '';
+  var incoming_strings = [];
+  var incoming_last_string = '';
+  var result = data.match(/<SessionUpdatedEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/SessionUpdatedEvent>/g);
+  if(result == null){
+    return '';
+  }
+  result.map(function(val){
+    if(val.length > 0){
+      incoming_strings[i] = val;
+      i++;
+    }
+  });
+  if(incoming_strings.length > 0){
+    for(var a = 1; a <= incoming_strings.length; a++){
+      incoming_last_string = incoming_strings[(incoming_strings.length - a)];
+      if(incoming_last_string != ''){
+        var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
+          if(val_connection.length > 0){
+            connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+            connectionId_i++;
+          }
+        });
+        if(connection_ids.length > 0){
+          if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
+              last_connection_id = connection_ids[(connection_ids.length - 1)];
+              caller_id = get_caller_id_parse(incoming_last_string);
+              if(caller_id != '' && caller_id != '444'){
+                  return incoming_last_string;
+              }
+          }
+        } else {
+          info_log('connection id not found');
+        }
+      }
+    }
+  }
+  return caller_id_last_string;
+}
 
 export var get_last_conn_id = function () {
   var file_name = 'onexcapi.txt';
