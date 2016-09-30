@@ -55,6 +55,7 @@ var watch_file = function (){
     if(event == 'change'){
       user_name = get_user_name();
       var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
+      console.log("temp api token: " + temp_api_token);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != -1){
         if(new_conn_id != last_conn_id) {

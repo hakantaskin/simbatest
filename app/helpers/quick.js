@@ -23,14 +23,11 @@ export var get_website = function (websiteid) {
 }
 
 export var url_generate = function (temp_url, map_key, map_value) {
-  console.log("Simba File Path: " + simba_file_path);
   fs.readFile(simba_file_path + 'server_ip.txt', function (err, server_ip) {
     temp_url = server_ip + temp_url;
-    console.log("first temp url: " + temp_url);
     map_key.forEach(function(value, key){
       temp_url = temp_url.replace(value, map_value[key]);
     });
-    console.log("last temp url: " + temp_url);
     return temp_url;
   });
 }
