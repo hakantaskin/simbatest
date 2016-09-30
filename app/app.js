@@ -73,6 +73,7 @@ var watch_file = function (){
               notifier_api(new_token, 'open');
             });
           }).on('error', (e) => {
+            error_log('Got error link:' + temp_api_token);
             error_log('Got error: ' + e.message);
           });
         } else {
