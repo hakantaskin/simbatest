@@ -15,7 +15,10 @@ const http = require('http');
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 var site = jetpack.read(simba_file_path + 'site.txt');
-
+var server_ip_text = '';
+fs.readFile(simba_file_path + 'server_ip.txt', function (err, server_ip) {
+  server_ip_text = server_ip;
+}
 var caller_id = '';
 var last_conn_id = '';
 var user_name = '';
@@ -54,7 +57,7 @@ var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
     if(event == 'change'){
       user_name = get_user_name();
-      var temp_api_token = url_generate(env.api_token, ["[agent]"], [user_name]);
+      var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
       console.log("temp api token: " + temp_api_token);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != -1){
@@ -118,7 +121,7 @@ var notifier_api = function(funct_token, func_window) {
 
   map_key = ["[agent]", "[token]"];
   map_value = [user_name, funct_token];
-  temp_url = url_generate(env.api_url, map_key, map_value);
+  temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
 
   var post_query = {
     "token": funct_token,
@@ -142,7 +145,7 @@ var notifier_api = function(funct_token, func_window) {
     var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
     var map_screen_value = [caller_id, site, funct_token];
 
-    var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
+    var screen_temp_url = url_generate(server_ip_text + env.call_screen, map_screen_key, map_screen_value);
     if(open_window_token = "callerid_" + caller_id + "_connectionid_" + last_conn_id) {
       open_window_token = "callerid_" + caller_id + "_connectionid_" + last_conn_id;
         var call_screen_options = {
