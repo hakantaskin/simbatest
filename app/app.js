@@ -18,7 +18,7 @@ var site = jetpack.read(simba_file_path + 'site.txt');
 var server_ip_text = '';
 fs.readFile(simba_file_path + 'server_ip.txt', function (err, server_ip) {
   server_ip_text = server_ip;
-}
+});
 var caller_id = '';
 var last_conn_id = '';
 var user_name = '';
