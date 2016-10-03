@@ -101,7 +101,7 @@ export var get_caller_id = function (last_conn_id) {
 
 var get_caller_id_2 = function (last_conn_id) {
   var file_name = 'onexcapi.txt';
-  var path = app.getPath('documents'); // appData ile degisecek
+  var path = app.getPath('appData'); // appData ile degisecek
   var src = jetpack.cwd(path + log_files);
   var data = src.read(file_name, 'txt');
   var callerids = [];
@@ -148,7 +148,7 @@ var get_caller_id_2 = function (last_conn_id) {
 
 var get_caller_id_3 = function (last_conn_id) {
   var file_name = 'onexcapi.txt';
-  var path = app.getPath('documents'); // appData ile degisecek
+  var path = app.getPath('appData'); // appData ile degisecek
   var src = jetpack.cwd(path + log_files);
   var data = src.read(file_name, 'txt');
   var callerids = [];
