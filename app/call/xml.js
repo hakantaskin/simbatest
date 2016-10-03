@@ -44,53 +44,58 @@ export var get_caller_id = function (last_conn_id) {
   var caller_id_last_string = '';
   var incoming_strings = [];
   var incoming_last_string = '';
-  var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g).map(function(val){
-    if(val.length > 0){
-      incoming_strings[i] = val;
-      i++;
-    }
-  });
-  if(incoming_strings.length > 0){
-    incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
-    if(incoming_last_string != ''){
-      var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
-        if(val_connection.length > 0){
-          connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
-          connectionId_i++;
-        }
-      });
-      if(connection_ids.length > 0){
-        if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
-            last_connection_id = connection_ids[(connection_ids.length - 1)];
-            caller_id_last_string = incoming_last_string;
-            caller_id = get_caller_id_parse(caller_id_last_string);
-            if(caller_id != '' && caller_id != '444'){
-              return caller_id;
-            }
-        }
-        var caller_id_2 = get_caller_id_2(last_conn_id);
-        if(caller_id_2 != ''){
-          last_connection_id = connection_ids[(connection_ids.length - 1)];
-          caller_id_last_string = caller_id_2;
-          caller_id = get_caller_id_parse(caller_id_last_string);
-          if(caller_id != '' && caller_id != '444'){
-            return caller_id;
+  var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g);
+  if(result != null){
+    result.map(function(val){
+      if(val.length > 0){
+        incoming_strings[i] = val;
+        i++;
+      }
+    });
+    if(incoming_strings.length > 0){
+      incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
+      if(incoming_last_string != ''){
+        var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
+          if(val_connection.length > 0){
+            connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+            connectionId_i++;
           }
-        }
-        var caller_id_3 = get_caller_id_3(last_conn_id)
-        if(caller_id != '' && caller_id != '444'){
-          last_connection_id = connection_ids[(connection_ids.length - 1)];
-          caller_id_last_string = caller_id_3;
-          caller_id = get_caller_id_parse(caller_id_last_string);
-          if(caller_id != ''){
-            return caller_id;
+        });
+        if(connection_ids.length > 0){
+          if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
+              last_connection_id = connection_ids[(connection_ids.length - 1)];
+              caller_id_last_string = incoming_last_string;
+              caller_id = get_caller_id_parse(caller_id_last_string);
+              if(caller_id != '' && caller_id != '444'){
+                return caller_id;
+              }
           }
+        } else {
+          info_log('connection id not found');
         }
-      } else {
-        info_log('connection id not found');
       }
     }
   }
+
+  var caller_id_2 = get_caller_id_2(last_conn_id);
+  if(caller_id_2 != ''){
+    last_connection_id = connection_ids[(connection_ids.length - 1)];
+    caller_id_last_string = caller_id_2;
+    caller_id = get_caller_id_parse(caller_id_last_string);
+    if(caller_id != '' && caller_id != '444'){
+      return caller_id;
+    }
+  }
+  var caller_id_3 = get_caller_id_3(last_conn_id)
+  if(caller_id != '' && caller_id != '444'){
+    last_connection_id = connection_ids[(connection_ids.length - 1)];
+    caller_id_last_string = caller_id_3;
+    caller_id = get_caller_id_parse(caller_id_last_string);
+    if(caller_id != ''){
+      return caller_id;
+    }
+  }
+
   return caller_id;
 };
 
