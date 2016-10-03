@@ -145,7 +145,7 @@ var notifier_api = function(funct_token, func_window) {
     var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
     var map_screen_value = [caller_id, site, funct_token];
 
-    var screen_temp_url = url_generate(server_ip_text + env.call_screen, map_screen_key, map_screen_value);
+    var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
     if(open_window_token != "callerid_" + caller_id + "_connectionid_" + last_conn_id) {
       open_window_token = "callerid_" + caller_id + "_connectionid_" + last_conn_id;
         var call_screen_options = {
