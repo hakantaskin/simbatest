@@ -82,19 +82,16 @@ export var get_caller_id = function (last_conn_id) {
     last_connection_id = connection_ids[(connection_ids.length - 1)];
     caller_id_last_string = caller_id_2;
     caller_id = get_caller_id_parse(caller_id_last_string);
-    console.log("Caller ID 2 String: " + caller_id_last_string);
-    console.log("Caller ID 2 : " + caller_id);
     if(caller_id != '' && caller_id != '444'){
       return caller_id;
     }
   }
+
   var caller_id_3 = get_caller_id_3(last_conn_id)
   if(caller_id_3 != ''){
     last_connection_id = connection_ids[(connection_ids.length - 1)];
     caller_id_last_string = caller_id_3;
     caller_id = get_caller_id_parse(caller_id_last_string);
-    console.log("Caller ID 3 String: " + caller_id_last_string);
-    console.log("Caller ID 3 : " + caller_id);
     if(caller_id != '' && caller_id != '444'){
       return caller_id;
     }
