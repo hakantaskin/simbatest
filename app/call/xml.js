@@ -6,24 +6,58 @@ var parser = new xml2js.Parser();
 var files = "\\Avaya\\Avaya one-X Communicator\\";
 var log_files = "\\Avaya\\Avaya one-X Communicator\\Log Files\\";
 
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 var get_caller_id_parse = function (data) {
   var callerids = [];
   var i = 0;
   var caller_id = '';
   var result = data.match(/<remoteAddress>(.*?)<\/remoteAddress>/g);
-  if(result == null){
-    return '';
+  var caller_number = '';
+  var caller_error = false;
+  if(result != null){
+    result.map(function(val){
+      if(val.length > 0){
+        caller_number = val.replace(/<\/?remoteAddress>/g,'');
+        callerids[i] = caller_number;
+        if(caller_number != '' && caller_number != '444'){
+            i++;
+        } else {
+          caller_error = true;
+        }
+      }
+    });
   }
-  result.map(function(val){
-    if(val.length > 0){
-      callerids[i] = val.replace(/<\/?remoteAddress>/g,'');
-      i++;
+
+  if(caller_error == true || result == null){
+    result = data.match(/<remoteUserName>(.*?)<\/remoteUserName>/g);
+    if(result != null){
+      result.map(function(val){
+        if(val.length > 0){
+          caller_number = val.replace(/<\/?remoteUserName>/g,'');
+          callerids[i] = caller_number;
+          if(caller_number != '' && caller_number != '444'){
+              i++;
+          }
+        }
+      });
+    } else {
+      return '';
     }
-  });
+  }
+
   if(callerids.length > 0){
       caller_id = callerids[(callerids.length - 1)];
       caller_id = caller_id.replace('@', '');
       caller_id = caller_id.replace('+', '');
+      caller_id = caller_id.trim();
+      caller_id = caller_id.substring(0,12);
+      caller_id = caller_id.trim();
+      if(!isNumeric(caller_id)){
+        caller_id = '';
+      }
   } else {
     info_log('callerid not found');
   }
