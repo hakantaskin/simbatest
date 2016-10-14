@@ -65,7 +65,7 @@ var watch_file = function (){
           token_generate_is_running[new_conn_id] = true;
           token_generate_is_running.join();
           info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-          last_conn_id = get_last_conn_id();
+          last_conn_id = new_conn_id;
           http.get(temp_api_token, (res) => {
             res.on("data", function(chunk) {
               new_token = chunk;
@@ -74,7 +74,7 @@ var watch_file = function (){
               if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
                 token_generate_is_running.splice(new_conn_id, 1);
               }
-              notifier_api(new_token, 'open');
+              notifier_api(new_token, 'open', new_conn_id);
             });
           }).on('error', (e) => {
             error_log('Got error link:' + temp_api_token);
@@ -86,7 +86,7 @@ var watch_file = function (){
             if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
               clearInterval(refreshIntervalId);
               info_log("Conn ID: " + new_conn_id + " / Clear Interval");
-              notifier_api(new_token, 'none');
+              notifier_api(new_token, 'none', new_conn_id);
             }
           },250);
         }
@@ -95,16 +95,15 @@ var watch_file = function (){
   });
 };
 
-var notifier_api = function(funct_token, func_window) {
+var notifier_api = function(funct_token, func_window, new_connection_id) {
   var site = jetpack.read(simba_file_path + 'site.txt', 'txt');
   if (site == '') {
     return false;
   }
-  var new_conn_id = get_last_conn_id();
   var map_key = [];
   var map_value = [];
 
-  caller_id = get_caller_id(last_conn_id);
+  caller_id = get_caller_id(new_connection_id);
   user_name = get_user_name();
   last_direction = get_last_direction();
   website = get_website(site);
@@ -129,14 +128,14 @@ var notifier_api = function(funct_token, func_window) {
     "caller": caller_id,
     "agent": user_name,
     "timestamp": timestamp,
-    "connection_id": last_conn_id,
+    "connection_id": new_connection_id,
     "website": website,
     "agentip": agentip
   };
 
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      info_log('Conn ID: ' + last_conn_id + ' / Token: '+ funct_token +' / Simba calllogs post ok.');
+      info_log('Conn ID: ' + new_connection_id + ' / Token: '+ funct_token +' / Simba calllogs post ok.');
     } else {
       error_log("Server error status code : " + response.statusCode);
     }
@@ -146,8 +145,8 @@ var notifier_api = function(funct_token, func_window) {
     var map_screen_value = [caller_id, site, funct_token];
 
     var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-    if(open_window_token != "callerid_" + caller_id + "_connectionid_" + last_conn_id) {
-      open_window_token = "callerid_" + caller_id + "_connectionid_" + last_conn_id;
+    if(open_window_token != "callerid_" + caller_id + "_connectionid_" + new_connection_id) {
+      open_window_token = "callerid_" + caller_id + "_connectionid_" + new_connection_id;
         var call_screen_options = {
           width: 800,
           height:600
