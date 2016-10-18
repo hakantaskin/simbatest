@@ -53,6 +53,8 @@ var agentip = '';
 if(typeof addresses[0] != 'undefined'){
   agentip = addresses[0];
 }
+
+
 //txt dinleme
 var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
@@ -64,28 +66,33 @@ var watch_file = function (){
       console.log("temp api token: " + temp_api_token);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != -1){
-          info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-          last_conn_id = new_conn_id;
+        setTimeout(token_generate(), 3000);
 
-          var post_query = {
-            "connection_id": new_conn_id,
-            "website": website,
-            "agentip": agentip
-          };
-
-          request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-              new_token = body;
-              info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
-              notifier_api(new_token, 'open', new_conn_id);
-            } else {
-              info_log("Server error status code : " + response.statusCode);
-            }
-          });
       }
     }
   });
 };
+
+var token_generate = function(){
+  info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+  last_conn_id = new_conn_id;
+
+  var post_query = {
+    "connection_id": new_conn_id,
+    "website": website,
+    "agentip": agentip
+  };
+
+  request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      new_token = body;
+      info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
+      notifier_api(new_token, 'open', new_conn_id);
+    } else {
+      info_log("Server error status code : " + response.statusCode);
+    }
+  });
+}
 
 var notifier_api = function(funct_token, func_window, new_connection_id) {
   var site = jetpack.read(simba_file_path + 'site.txt', 'txt');
