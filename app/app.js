@@ -29,8 +29,8 @@ var timestamp = '';
 var website = '';
 var new_token = '';
 var log_file = get_log_files_url();
-var token_generate_is_running = [];
 var open_window_token = '';
+// set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
     if (env.name !== 'production') {
@@ -38,7 +38,7 @@ var setApplicationMenu = function () {
     }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
-
+//agent ip buluyoruz
 var interfaces = os.networkInterfaces();
 var addresses = [];
 for (var k in interfaces) {
@@ -53,42 +53,36 @@ var agentip = '';
 if(typeof addresses[0] != 'undefined'){
   agentip = addresses[0];
 }
+//txt dinleme
 var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
     if(event == 'change'){
       user_name = get_user_name();
+      website = get_website(site);
+      timestamp = new Date().getTime();
       var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
       console.log("temp api token: " + temp_api_token);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != -1){
         if(new_conn_id != last_conn_id) {
-          token_generate_is_running[new_conn_id] = true;
-          token_generate_is_running.join();
           info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
           last_conn_id = new_conn_id;
-          http.get(temp_api_token, (res) => {
-            res.on("data", function(chunk) {
-              new_token = chunk;
+
+          var post_query = {
+            "connection_id": new_conn_id,
+            "website": website,
+            "agentip": agentip
+          };
+
+          request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+              new_token = body;
               info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
-              var index = token_generate_is_running.indexOf(new_conn_id);
-              if(typeof token_generate_is_running[new_conn_id] != 'undefined'){
-                token_generate_is_running.splice(new_conn_id, 1);
-              }
               notifier_api(new_token, 'open', new_conn_id);
-            });
-          }).on('error', (e) => {
-            error_log('Got error link:' + temp_api_token);
-            error_log('Got error: ' + e.message);
-          });
-        } else {
-          info_log('ELSE: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-          var  refreshIntervalId = setInterval(function(){
-            if(typeof token_generate_is_running[new_conn_id] == 'undefined'){
-              clearInterval(refreshIntervalId);
-              info_log("Conn ID: " + new_conn_id + " / Clear Interval");
-              notifier_api(new_token, 'none', new_conn_id);
+            } else {
+              info_log("Server error status code : " + response.statusCode);
             }
-          },250);
+          });
         }
       }
     }
@@ -104,10 +98,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
   var map_value = [];
 
   caller_id = get_caller_id(new_connection_id);
-  user_name = get_user_name();
   last_direction = get_last_direction();
-  website = get_website(site);
-  timestamp = new Date().getTime();
   if(funct_token == ''){
     info_log('Token not found');
     return false;
@@ -125,12 +116,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
   var post_query = {
     "token": funct_token,
     "direction": last_direction,
-    "caller": caller_id,
-    "agent": user_name,
-    "timestamp": timestamp,
-    "connection_id": new_connection_id,
-    "website": website,
-    "agentip": agentip
+    "caller": caller_id
   };
 
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
