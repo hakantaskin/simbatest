@@ -123,7 +123,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
     if (!error && response.statusCode == 200) {
       info_log('Conn ID: ' + new_connection_id + ' / Token: '+ funct_token +' / Simba calllogs post ok.');
     } else {
-      error_log("Server error status code : " + response.statusCode);
+      error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
     }
   });
   if(caller_id != ''){
