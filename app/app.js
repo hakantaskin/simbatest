@@ -64,7 +64,6 @@ var watch_file = function (){
       console.log("temp api token: " + temp_api_token);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != -1){
-        if(new_conn_id != last_conn_id) {
           info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
           last_conn_id = new_conn_id;
 
@@ -83,7 +82,6 @@ var watch_file = function (){
               info_log("Server error status code : " + response.statusCode);
             }
           });
-        }
       }
     }
   });
@@ -116,7 +114,8 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
   var post_query = {
     "token": funct_token,
     "direction": last_direction,
-    "caller": caller_id
+    "caller": caller_id,
+    "agentip": agentip
   };
 
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
