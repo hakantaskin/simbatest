@@ -30,6 +30,7 @@ var website = '';
 var new_token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
+var change_start = false;
 // set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
@@ -59,6 +60,7 @@ if(typeof addresses[0] != 'undefined'){
 var watch_file = function (){
   fs.watch(log_file, (event, filename) => {
     if(event == 'change'){
+      change_start = true;
       user_name = get_user_name();
       website = get_website(site);
       timestamp = new Date().getTime();
@@ -66,27 +68,29 @@ var watch_file = function (){
       console.log("temp api token: " + temp_api_token);
       var new_conn_id = get_last_conn_id();
       if(new_conn_id != -1){
-        setTimeout(function(){
-          info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-          last_conn_id = new_conn_id;
+        if(change_start == false){
+          setTimeout(function(){
+            info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+            last_conn_id = new_conn_id;
 
-          var post_query = {
-            "connection_id": new_conn_id,
-            "website": website,
-            "agentip": agentip
-          };
+            var post_query = {
+              "connection_id": new_conn_id,
+              "website": website,
+              "agentip": agentip
+            };
 
-          request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-              new_token = body;
-              info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
-              notifier_api(new_token, 'open', new_conn_id);
-            } else {
-              info_log("Server error status code : " + response.statusCode);
-            }
-          });
-        }, 3000);
-
+            request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                new_token = body;
+                change_start = false;
+                info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
+                notifier_api(new_token, 'open', new_conn_id);
+              } else {
+                info_log("Server error status code : " + response.statusCode);
+              }
+            });
+          }, 3000);
+        }
       }
     }
   });
