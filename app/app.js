@@ -31,7 +31,7 @@ var new_token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
 var i = 0;
-var data = [];
+var data = {};
 // set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
@@ -113,7 +113,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
   caller_id = get_caller_id(new_connection_id);
   last_direction = get_last_direction();
   if(last_direction != ''){
-      data[new_connection_id]['last_direction'] = true;
+      data[new_connection_id] = {"last_direction": true};
   }
 
   if(funct_token == ''){
@@ -156,7 +156,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
           height:600
         }
         if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-          data[new_connection_id]['caller_id'] = true;
+          data[new_connection_id] = {"caller_id": true};
           var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
         }
         // Create a new window
