@@ -89,7 +89,7 @@ var watch_file = function (){
         }
       });
     } else {
-      notifier_api(else_new_token, 'none', last_conn_id);
+      notifier_api(new_token, 'none', last_conn_id);
     }
   }
 };
