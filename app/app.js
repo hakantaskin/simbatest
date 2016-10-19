@@ -76,7 +76,9 @@ var watch_file = function (){
           new_token = body;
           change_i = 0;
           info_log("Conn ID: " + new_conn_id + " / Token data event token: " + new_token);
-          setTimeout(notifier_api(new_token, 'open', last_conn_id), 1000);
+          setTimeout(function(){
+            notifier_api(new_token, 'open', last_conn_id)
+          }, 1000);
         } else {
           info_log("Server error status code : " + response.statusCode);
         }
@@ -84,7 +86,9 @@ var watch_file = function (){
       info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
     } else {
       var else_new_token = new_token;
-      setTimeout(notifier_api(else_new_token, 'none', last_conn_id), 3000);
+      setTimeout(function(){
+        notifier_api(else_new_token, 'none', last_conn_id)
+      }, 3000);
     }
   }
 };
@@ -145,4 +149,6 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
     }
   }
 };
-setInterval(watch_file(),1000);
+setInterval(function(){
+    watch_file()
+},1000);
