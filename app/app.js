@@ -30,7 +30,8 @@ var website = '';
 var new_token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
-var change_i = 0;
+var i = 0;
+var data = [];
 // set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
@@ -65,6 +66,10 @@ var watch_file = function (){
   var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
   if(new_conn_id != -1){
     if(new_conn_id != last_conn_id){
+      i++;
+      if(i == 1){
+        return false;
+      }
       last_conn_id = new_conn_id;
       var post_query = {
         "connection_id": last_conn_id,
@@ -74,11 +79,10 @@ var watch_file = function (){
       request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           new_token = body;
-          change_i = 0;
           info_log("Conn ID: " + new_conn_id + " / Token data event token: " + new_token);
           setTimeout(function(){
             notifier_api(new_token, 'open', last_conn_id)
-          }, 1000);
+          }, 3000);
         } else {
           info_log("Server error status code : " + response.statusCode);
         }
@@ -94,6 +98,11 @@ var watch_file = function (){
 };
 
 var notifier_api = function(funct_token, func_window, new_connection_id) {
+  if(typeof data[new_connection_id]['last_direction'] != 'undefined' && typeof data[new_connection_id]['caller_id'] != 'undefined'){
+    if(data[new_connection_id]['last_direction'] == true && data[new_connection_id]['caller_id'] == true){
+      return true;
+    }
+  }
   var site = jetpack.read(simba_file_path + 'site.txt', 'txt');
   if (site == '') {
     return false;
@@ -103,6 +112,10 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
 
   caller_id = get_caller_id(new_connection_id);
   last_direction = get_last_direction();
+  if(last_direction != ''){
+      data[new_connection_id]['last_direction'] = true;
+  }
+
   if(funct_token == ''){
     info_log('Token not found');
     return false;
@@ -143,6 +156,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
           height:600
         }
         if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
+          data[new_connection_id]['caller_id'] = true;
           var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
         }
         // Create a new window
