@@ -31,6 +31,7 @@ var new_token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
 var i = 0;
+var data = {};
 // set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
