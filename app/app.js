@@ -64,10 +64,15 @@ var watch_file = function (){
   timestamp = new Date().getTime();
   var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
   if(new_conn_id != -1){
-    if(new_conn_id != last_conn_id && last_conn_id != ''){
+    if(new_conn_id != last_conn_id){
       data = {};
       data[new_conn_id] = {};
+      if(last_conn_id == ''){
+        last_conn_id = new_conn_id;
+        return false;
+      }
       last_conn_id = new_conn_id;
+
       var post_query = {
         "connection_id": last_conn_id,
         "website": website,
@@ -85,7 +90,7 @@ var watch_file = function (){
         }
       });
       info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-    } else if(new_conn_id == last_conn_id && last_conn_id != '') {
+    } else {
       var else_new_token = new_token;
       setTimeout(function(){
         notifier_api(else_new_token, 'none', last_conn_id)
