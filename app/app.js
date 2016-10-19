@@ -110,7 +110,7 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
   caller_id = get_caller_id(new_connection_id);
   last_direction = get_last_direction();
   if(last_direction != ''){
-      data[new_connection_id].last_direction = true};
+      data[new_connection_id].last_direction = true;
       console.log("conn id : " + new_connection_id + "last_direction = true");
   }
 
