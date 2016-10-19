@@ -58,46 +58,35 @@ if(typeof addresses[0] != 'undefined'){
 
 //txt dinleme
 var watch_file = function (){
-  fs.watch(log_file, (event, filename) => {
-    if(event == 'change'){
-      change_i++;
-      user_name = get_user_name();
-      website = get_website(site);
-      timestamp = new Date().getTime();
-      var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
-      console.log("temp api token: " + temp_api_token);
-      var new_conn_id = get_last_conn_id();
-      if(new_conn_id != -1){
-        if(new_conn_id != last_conn_id){
-          last_conn_id = new_conn_id;
-          setTimeout(function(){
-            info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-            var post_query = {
-              "connection_id": new_conn_id,
-              "website": website,
-              "agentip": agentip
-            };
-
-            request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
-              if (!error && response.statusCode == 200) {
-                new_token = body;
-                change_i = 0;
-                info_log("Conn ID: " + new_conn_id+ " / Token data event token: " + new_token);
-                notifier_api(new_token, 'open', new_conn_id);
-              } else {
-                info_log("Server error status code : " + response.statusCode);
-              }
-            });
-          }, (change_i * 1500));
+  var new_conn_id = get_last_conn_id();
+  user_name = get_user_name();
+  website = get_website(site);
+  timestamp = new Date().getTime();
+  var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
+  if(new_conn_id != -1){
+    if(new_conn_id != last_conn_id){
+      last_conn_id = new_conn_id;
+      var post_query = {
+        "connection_id": last_conn_id,
+        "website": website,
+        "agentip": agentip
+      };
+      request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          new_token = body;
+          change_i = 0;
+          info_log("Conn ID: " + new_conn_id + " / Token data event token: " + new_token);
+          setTimeout(notifier_api(new_token, 'open', last_conn_id), 1000);
         } else {
-          setTimeout(function(){
-            info_log('ELSE: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-            notifier_api(new_token, 'open', new_conn_id);
-          }, 3000);
+          info_log("Server error status code : " + response.statusCode);
         }
-      }
+      });
+      info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
+    } else {
+      var else_new_token = new_token;
+      setTimeout(notifier_api(else_new_token, 'none', last_conn_id), 3000);
     }
-  });
+  }
 };
 
 var notifier_api = function(funct_token, func_window, new_connection_id) {
@@ -156,5 +145,4 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
     }
   }
 };
-
-watch_file();
+setInterval(watch_file(),1000);
