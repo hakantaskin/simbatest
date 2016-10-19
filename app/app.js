@@ -31,7 +31,6 @@ var new_token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
 var i = 0;
-var data = {};
 // set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
@@ -70,7 +69,8 @@ var watch_file = function (){
       if(i == 1){
         return false;
       }
-      data[new_connection_id] = {};
+      var data = {};
+      data[new_conn_id] = {};
       last_conn_id = new_conn_id;
       var post_query = {
         "connection_id": last_conn_id,
