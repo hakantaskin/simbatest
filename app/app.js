@@ -71,6 +71,7 @@ var watch_file = function (){
         last_conn_id = new_conn_id;
         return false;
       }
+      info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
       last_conn_id = new_conn_id;
 
       var post_query = {
@@ -82,19 +83,13 @@ var watch_file = function (){
         if (!error && response.statusCode == 200) {
           new_token = body;
           info_log("Conn ID: " + new_conn_id + " / Token data event token: " + new_token);
-          setTimeout(function(){
-            notifier_api(new_token, 'open', last_conn_id)
-          }, 3000);
+          notifier_api(new_token, 'open', last_conn_id);
         } else {
-          info_log("Server error status code : " + response.statusCode);
+          info_log("Server error status code: " + response.statusCode);
         }
       });
-      info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
     } else {
-      var else_new_token = new_token;
-      setTimeout(function(){
-        notifier_api(else_new_token, 'none', last_conn_id)
-      }, 3000);
+      notifier_api(else_new_token, 'none', last_conn_id);
     }
   }
 };
