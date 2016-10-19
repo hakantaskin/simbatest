@@ -70,6 +70,7 @@ var watch_file = function (){
       if(i == 1){
         return false;
       }
+      data[new_connection_id] = {};
       last_conn_id = new_conn_id;
       var post_query = {
         "connection_id": last_conn_id,
