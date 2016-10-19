@@ -30,7 +30,6 @@ var website = '';
 var new_token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
-var i = 0;
 var data = {};
 // set menu
 var setApplicationMenu = function () {
@@ -65,11 +64,7 @@ var watch_file = function (){
   timestamp = new Date().getTime();
   var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
   if(new_conn_id != -1){
-    if(new_conn_id != last_conn_id){
-      i++;
-      if(i == 1){
-        return false;
-      }
+    if(new_conn_id != last_conn_id && last_conn_id != ''){
       data = {};
       data[new_conn_id] = {};
       last_conn_id = new_conn_id;
@@ -90,7 +85,7 @@ var watch_file = function (){
         }
       });
       info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-    } else {
+    } else if(new_conn_id == last_conn_id && last_conn_id != '') {
       var else_new_token = new_token;
       setTimeout(function(){
         notifier_api(else_new_token, 'none', last_conn_id)
