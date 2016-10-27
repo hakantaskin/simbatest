@@ -96,7 +96,7 @@ var watch_file = function (){
 
 var notifier_api = function(funct_token) {
   funct_token = new_token;
-  new_connection_id = get_last_conn_id();
+  var new_connection_id = get_last_conn_id();
   if(typeof data[new_connection_id]['last_direction'] != 'undefined' && typeof data[new_connection_id]['caller_id'] != 'undefined'){
     if(data[new_connection_id]['last_direction'] == true && data[new_connection_id]['caller_id'] == true){
       return true;
