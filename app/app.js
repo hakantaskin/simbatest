@@ -83,18 +83,20 @@ var watch_file = function (){
         if (!error && response.statusCode == 200) {
           new_token = body;
           info_log("Conn ID: " + new_conn_id + " / Token data event token: " + new_token);
-          notifier_api(new_token, 'open', last_conn_id);
+          notifier_api();
         } else {
           info_log("Server error status code: " + response.statusCode);
         }
       });
     } else {
-      notifier_api(new_token, 'none', last_conn_id);
+      notifier_api();
     }
   }
 };
 
-var notifier_api = function(funct_token, func_window, new_connection_id) {
+var notifier_api = function(funct_token) {
+  funct_token = new_token;
+  new_connection_id = get_last_conn_id();
   if(typeof data[new_connection_id]['last_direction'] != 'undefined' && typeof data[new_connection_id]['caller_id'] != 'undefined'){
     if(data[new_connection_id]['last_direction'] == true && data[new_connection_id]['caller_id'] == true){
       return true;
@@ -164,4 +166,4 @@ var notifier_api = function(funct_token, func_window, new_connection_id) {
 };
 setInterval(function(){
     watch_file()
-},1000);
+},2000);

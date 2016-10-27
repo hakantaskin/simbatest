@@ -55,7 +55,7 @@ var get_caller_id_parse = function (data) {
       caller_id = caller_id.trim();
       caller_id = caller_id.substring(0,12);
       caller_id = caller_id.trim();
-      if(!isNumeric(caller_id)){
+      if(!isNumeric(caller_id) && caller_id.indexOf('*') == -1){
         caller_id = '';
       }
   } else {
@@ -69,6 +69,7 @@ export var get_caller_id = function (last_conn_id) {
   var path = app.getPath('appData');
   var src = jetpack.cwd(path + log_files);
   var data = src.read(file_name, 'txt');
+  info_log('Get Caller Id function last connection id: ' + last_conn_id);
   var callerids = [];
   var connection_ids = [];
   var last_connection_id = 0;
