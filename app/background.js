@@ -25,8 +25,8 @@ if(site == undefined) {
   });
 }
 
-if(server_ip == undefined) {
-  fs.writeFile( simba_file_path + 'server_ip.txt', 'http://172.22.3.199', (err) => {
+if(server_ip == undefined || server_ip.length < 20){
+  fs.writeFile( simba_file_path + 'server_ip.txt', 'http://172.22.3.199:4567', (err) => {
     if (err){
       info_log(err);
     }
