@@ -52,6 +52,7 @@ var get_caller_id_parse = function (data) {
       caller_id = callerids[(callerids.length - 1)];
       caller_id = caller_id.replace('@', '');
       caller_id = caller_id.replace('+', '');
+      caller_id = caller_id.replace('-', '');
       caller_id = caller_id.trim();
       caller_id = caller_id.substring(0,12);
       caller_id = caller_id.trim();
