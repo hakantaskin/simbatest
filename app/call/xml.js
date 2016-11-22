@@ -57,6 +57,11 @@ var get_caller_id_parse = function (data) {
       caller_id = caller_id.substring(0,12);
       caller_id = caller_id.trim();
       if(!isNumeric(caller_id) && caller_id.indexOf('*') == -1){
+        for(i = caller_id.length; i > 0; i--){
+          if(isNumeric(caller_id.substring(0,i))){
+            return caller_id.substring(0,12);
+          }
+        }
         caller_id = '';
       }
   } else {

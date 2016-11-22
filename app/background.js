@@ -3,7 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 import os from 'os';
-import { app, Menu, ipcMain } from 'electron';
+import { app, Menu, ipcMain, Tray } from 'electron';
 import { devMenuTemplate, prodMenuTemplate } from './helpers/dev_menu_template';
 import { editMenuTemplate } from './helpers/edit_menu_template';
 import createWindow from './helpers/window';
@@ -43,7 +43,10 @@ var setApplicationMenu = function () {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
+let tray = null
 app.on('ready', function () {
+    tray = new Tray('C:/Simbalauncher/icon.ico');
+    tray.setToolTip('Simba is running.');
     setApplicationMenu();
     var url = 'file://' + __dirname + '/app.html';
     var settings_url = 'file://' + __dirname + '/views/site.html';

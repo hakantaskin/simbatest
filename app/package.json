@@ -2,7 +2,7 @@
   "name": "simba",
   "productName": "Simba",
   "description": "Simba callcenter App",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": "Metglobal",
   "copyright": "© 2016, Metglobal",
   "main": "background.js",
