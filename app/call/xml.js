@@ -95,12 +95,15 @@ export var get_caller_id = function (last_conn_id) {
     if(incoming_strings.length > 0){
       incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
       if(incoming_last_string != ''){
-        var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
-          if(val_connection.length > 0){
-            connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
-            connectionId_i++;
-          }
-        });
+        var result_connection = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g);
+        if(result_connection != null){
+          var result_connection_id = result_connection.map(function(val_connection){
+            if(val_connection.length > 0){
+              connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+              connectionId_i++;
+            }
+          });
+        }
         if(connection_ids.length > 0){
           if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
               last_connection_id = connection_ids[(connection_ids.length - 1)];
@@ -167,12 +170,15 @@ var get_caller_id_2 = function (last_conn_id) {
   if(incoming_strings.length > 0){
     incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
     if(incoming_last_string != ''){
-      var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
-        if(val_connection.length > 0){
-          connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
-          connectionId_i++;
-        }
-      });
+      var result_connection = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g);
+      if(result_connection != null){
+        var result_connection_id = result_connection.map(function(val_connection){
+          if(val_connection.length > 0){
+            connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+            connectionId_i++;
+          }
+        });
+      }
       if(connection_ids.length > 0){
         if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
             last_connection_id = connection_ids[(connection_ids.length - 1)];
@@ -215,12 +221,15 @@ var get_caller_id_3 = function (last_conn_id) {
     for(var a = 1; a <= incoming_strings.length; a++){
       incoming_last_string = incoming_strings[(incoming_strings.length - a)];
       if(incoming_last_string != ''){
-        var result_connection_id = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val_connection){
-          if(val_connection.length > 0){
-            connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
-            connectionId_i++;
-          }
-        });
+        var result_connection = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g);
+        if(result_connection != null){
+          var result_connection_id = result_connection.map(function(val_connection){
+            if(val_connection.length > 0){
+              connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+              connectionId_i++;
+            }
+          });
+        }
         if(connection_ids.length > 0){
           if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
               last_connection_id = connection_ids[(connection_ids.length - 1)];
