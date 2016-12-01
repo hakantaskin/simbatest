@@ -10,6 +10,10 @@ function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
 var get_caller_id_parse = function (data) {
   var callerids = [];
   var i = 0;
@@ -50,16 +54,16 @@ var get_caller_id_parse = function (data) {
 
   if(callerids.length > 0){
       caller_id = callerids[(callerids.length - 1)];
-      caller_id = caller_id.replace('@', '');
-      caller_id = caller_id.replace('+', '');
-      caller_id = caller_id.replace('-', '');
+      caller_id = replaceAll(caller_id, '@', '');
+      caller_id = replaceAll(caller_id, '+', '');;
+      caller_id = replaceAll(caller_id, '-', '');
       caller_id = caller_id.trim();
-      caller_id = caller_id.substring(0,12);
+      caller_id = caller_id.substring(0,15);
       caller_id = caller_id.trim();
       if(!isNumeric(caller_id) && caller_id.indexOf('*') == -1){
         for(i = caller_id.length; i > 0; i--){
           if(isNumeric(caller_id.substring(0,i))){
-            return caller_id.substring(0,12);
+            return caller_id.substring(0,i);
           }
         }
         caller_id = '';

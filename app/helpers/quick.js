@@ -42,7 +42,6 @@ export var error_log = function (log) {
   var date = new Date().toISOString();
   fs.appendFile(simba_file_path + 'error_log.txt', "[ "+ date +" ] " + log + "\r\n", (err) => {
   if (err) throw err;
-  console.error(log);
   });
 }
 
@@ -50,6 +49,5 @@ export var info_log = function (log) {
   var date = new Date().toISOString();
   fs.appendFile(simba_file_path + 'info_log.txt', "[ "+ date +" ] " + log + "\r\n", (err) => {
   if (err) throw err;
-  console.log(log);
   });
 }
