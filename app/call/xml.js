@@ -258,10 +258,14 @@ export var get_last_conn_id = function () {
   var data = src.read(file_name, 'txt');
   var connectionids = [];
   var i = 0;
-  var result = data.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val){
-     connectionids[i] = val.replace(/<\/?connectionId>/g,'');
-     i++;
-  });
+  var match_result = data.match(/<connectionId>(.*?)<\/connectionId>/g);
+  if(match_result != null){
+    var result = match_result.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val){
+       connectionids[i] = val.replace(/<\/?connectionId>/g,'');
+       i++;
+    });
+  }
+
   if(connectionids.length > 0){
       return connectionids[(connectionids.length - 1)];
   } else {
