@@ -260,7 +260,7 @@ export var get_last_conn_id = function () {
   var i = 0;
   var match_result = data.match(/<connectionId>(.*?)<\/connectionId>/g);
   if(match_result != null){
-    var result = match_result.match(/<connectionId>(.*?)<\/connectionId>/g).map(function(val){
+    var result = match_result.map(function(val){
        connectionids[i] = val.replace(/<\/?connectionId>/g,'');
        i++;
     });
