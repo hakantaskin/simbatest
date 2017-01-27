@@ -187,14 +187,14 @@ var get_log_path = function(){
 
 var create_directory = function(){
   var log_path = get_log_path();
-  if (!fs.existsSync(log_path)){
-    fs.mkdirSync(log_path);
+  if (!fs.exists(log_path)){
+    fs.mkdir(log_path);
   }
   return log_path;
 }
 
 var create_log_file = function(connectionid){
-  filename = get_log_path() + connectionid + ".txt";
+  var filename = get_log_path() + connectionid + ".txt";
   fs.open(filename,'r',function(err, fd){
     if (err) {
       fs.writeFile(filename, '', function(err) {
@@ -211,7 +211,7 @@ var create_log_file = function(connectionid){
 }
 
 var append_log_file = function(connectionid, tail_data){
-  filename = get_log_path() + connectionid + ".txt";
+  var filename = get_log_path() + connectionid + ".txt";
   fs.open(filename,'r',function(err, fd){
     if (!err) {
       fs.appendFile(filename, tail_data, function(err) {
@@ -231,8 +231,8 @@ var append_log_file = function(connectionid, tail_data){
 }
 
 var parser_log_file = function(connectionid, token){
-  filename = get_log_path() + connectionid + ".txt";
-  path_log_files = get_log_path();
+  var filename = get_log_path() + connectionid + ".txt";
+  var path_log_files = get_log_path();
   if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
     if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
       return true;
@@ -245,8 +245,8 @@ var parser_log_file = function(connectionid, token){
   var map_key = [];
   var map_value = [];
 
-  caller_id = get_caller_id(connectionid, path_log_files, filename);
-  last_direction = get_last_direction(path_log_files, filename);
+  var caller_id = get_caller_id(connectionid, path_log_files, filename);
+  var last_direction = get_last_direction(path_log_files, filename);
   if(last_direction != ''){
       data[new_connection_id].last_direction = true;
   }
