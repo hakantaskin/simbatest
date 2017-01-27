@@ -308,7 +308,7 @@ var watch_file_2 = function(){
   tail.on("line", function(tail_data) {
     new_conn_id = get_connection_id_by_data(tail_data);
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
-      if(new_conn_id != last_conn_id &&){
+      if(new_conn_id != last_conn_id){
         data = {};
         data[new_conn_id] = {};
         last_conn_id = new_conn_id;
