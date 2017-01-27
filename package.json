@@ -36,6 +36,7 @@
     "electron-window-manager": "^1.0.1",
     "jsonfile": "^2.3.1",
     "request": "^2.74.0",
+    "tail": "^1.2.1",
     "xml2js": "^0.4.17"
   }
 }
