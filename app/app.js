@@ -332,6 +332,7 @@ var watch_file_2 = function(){
           }
         });
       } else {
+        console.log("Tail data2: " + tail_data);
         append_log_file(last_conn_id, tail_data);
         parser_log_file(last_conn_id);
       }
