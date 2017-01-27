@@ -189,7 +189,6 @@ var get_log_path = function(){
 var create_directory = function(){
   var log_path = get_log_path();
   if (!fs.exists(log_path)){
-    console.log(log);
     fs.mkdir(log_path);
   }
   return log_path;
@@ -216,7 +215,7 @@ var append_log_file = function(connectionid, tail_data){
   var filename = get_log_path() + connectionid + ".txt";
   fs.open(filename,'r',function(err, fd){
     if (!err) {
-      fs.appendFile(filename, tail_data, function(err) {
+      fs.appendFile(filename, '\n' + tail_data, function(err) {
           if(err) {
               error_log(err);
           }
@@ -318,6 +317,7 @@ var watch_file_2 = function(){
         create_directory();
         create_log_file(last_conn_id);
         append_log_file(last_conn_id, tail_data);
+        console.log("Tail data: " + tail_data);
         var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
         var post_query = {
           "connection_id": last_conn_id,
