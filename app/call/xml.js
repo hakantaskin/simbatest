@@ -74,10 +74,16 @@ var get_caller_id_parse = function (data) {
   return caller_id;
 };
 
-export var get_caller_id = function (last_conn_id) {
+export var get_caller_id = function (last_conn_id, path_log_files = '', filename = '') {
   var file_name = 'onexcapi.txt';
   var path = app.getPath('appData');
   var src = jetpack.cwd(path + log_files);
+  if(path_log_files != ''){
+    src = jetpack.cwd(path_log_files);
+  }
+  if(filename != ''){
+    file_name = filename;
+  }
   var data = src.read(file_name, 'txt');
   var callerids = [];
   var connection_ids = [];
@@ -274,10 +280,16 @@ export var get_last_conn_id = function () {
   }
 }
 
-export var get_last_direction = function () {
+export var get_last_direction = function (path_log_files = '', filename = '') {
   var file_name = 'onexcapi.txt';
   var path = app.getPath('appData'); // appData ile degisecek
   var src = jetpack.cwd(path + log_files);
+  if(path_log_files != ''){
+    src = jetpack.cwd(path_log_files);
+  }
+  if(filename != ''){
+    file_name = filename;
+  }
   var data = src.read(file_name, 'txt');
   var directions = [];
   var i = 0;
@@ -367,4 +379,22 @@ export var get_log_files_url = function () {
   var file_name = 'onexcapi.txt';
   var path = app.getPath('appData'); // appData ile degisecek
   return (path + log_files + file_name);
+}
+
+export var get_connection_id_by_data = function (data) {
+  var connectionids = [];
+  var i = 0;
+  var match_result = data.match(/<connectionId>(.*?)<\/connectionId>/g);
+  if(match_result != null){
+    var result = match_result.map(function(val){
+       connectionids[i] = val.replace(/<\/?connectionId>/g,'');
+       i++;
+    });
+  }
+
+  if(connectionids.length > 0){
+      return connectionids[(connectionids.length - 1)];
+  } else {
+      return '';
+  }
 }
