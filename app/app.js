@@ -31,6 +31,7 @@ var temp_url = '';
 var timestamp = '';
 var website = '';
 var new_token = '';
+var token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
 var data = {};
@@ -230,7 +231,7 @@ var append_log_file = function(connectionid, tail_data){
   return true;
 }
 
-var parser_log_file = function(connectionid, token){
+var parser_log_file = function(connectionid){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
   if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
@@ -324,14 +325,14 @@ var watch_file_2 = function(){
         };
         request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, token) {
           if (!error && response.statusCode == 200) {
-            parser_log_file(last_conn_id, token);
+            parser_log_file(last_conn_id);
           } else {
             info_log("Server error status code: " + response.statusCode);
           }
         });
       } else {
         append_log_file(last_conn_id, tail_data);
-        parser_log_file(last_conn_id, token);
+        parser_log_file(last_conn_id);
       }
     }
   });
