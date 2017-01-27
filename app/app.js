@@ -183,12 +183,13 @@ var get_today = function(){
 }
 
 var get_log_path = function(){
-  return simba_log_file_path + get_today();
+  return simba_log_file_path + get_today() + '\\';
 }
 
 var create_directory = function(){
   var log_path = get_log_path();
   if (!fs.exists(log_path)){
+    console.log(log);
     fs.mkdir(log_path);
   }
   return log_path;
