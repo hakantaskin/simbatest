@@ -312,7 +312,8 @@ var watch_file_2 = function(){
   website = get_website(site);
   timestamp = new Date().getTime();
   tail.on("line", function(tail_data) {
-    var linedata = tail_data;
+    append_log_file(10, tail_data);
+    /*var linedata = tail_data;
     new_conn_id = get_connection_id_by_data(tail_data);
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
       if(new_conn_id != last_conn_id){
@@ -345,7 +346,7 @@ var watch_file_2 = function(){
 
   tail.on("error", function(error) {
     error_log('Tail Error :' + error);
-  });
+  });*/
 }
 
 watch_file_2();
