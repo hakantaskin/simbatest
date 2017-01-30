@@ -84,7 +84,6 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
   if(filename != ''){
     file_name = filename;
   }
-  console.log("get caller filename = " + file_name);
   var data = src.read(file_name, 'txt');
   var callerids = [];
   var connection_ids = [];
@@ -291,7 +290,6 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   if(filename != ''){
     file_name = filename;
   }
-  console.log("direction filename " + file_name);
   var data = src.read(file_name, 'txt');
   var directions = [];
   var i = 0;

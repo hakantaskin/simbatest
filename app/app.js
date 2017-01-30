@@ -188,9 +188,11 @@ var get_log_path = function(){
 
 var create_directory = function(){
   var log_path = get_log_path();
-  if (!fs.exists(log_path)){
-    fs.mkdir(log_path);
-  }
+    if (!fs.exists(log_path)){
+      try {
+        fs.mkdir(log_path);
+      } catch(err){}
+    }
   return log_path;
 }
 
