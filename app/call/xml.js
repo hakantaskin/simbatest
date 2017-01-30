@@ -295,10 +295,13 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   var data = src.read(file_name, 'txt');
   var directions = [];
   var i = 0;
-  var result = data.match(/<incoming>(.*?)<\/incoming>/g).map(function(val){
-     directions[i] = val.replace(/<\/?incoming>/g,'');
-     i++;
-  });
+  var match_result = data.match(/<incoming>(.*?)<\/incoming>/g);
+  if(match_result != null){
+    var result = match_result.map(function(val){
+       directions[i] = val.replace(/<\/?incoming>/g,'');
+       i++;
+    });
+  }
   if(directions.length > 0){
     if (directions[(directions.length - 1)] == 'false'){
       return 'out';
@@ -306,7 +309,6 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
       return 'in';
     }
   } else {
-    info_log('directions not found');
     return '';
   }
 }
