@@ -205,7 +205,11 @@ var create_log_file = function(connectionid){
       });
     } else {
       fs.unlink(filename);
-      create_log_file(connectionid);
+      fs.writeFile(filename, '', function(err) {
+          if(err) {
+              error_log(err);
+          }
+      });
     }
   });
   return true;
@@ -315,9 +319,8 @@ var watch_file_2 = function(){
         data[new_conn_id] = {};
         last_conn_id = new_conn_id;
         create_directory();
-        create_log_file(last_conn_id);
+        console.log("tail data IF : " + tail_data);
         append_log_file(last_conn_id, tail_data);
-        console.log("Tail data: " + tail_data);
         var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
         var post_query = {
           "connection_id": last_conn_id,
@@ -332,7 +335,7 @@ var watch_file_2 = function(){
           }
         });
       } else {
-        console.log("Tail data2: " + tail_data);
+        console.log("Tail data ELSE : " + tail_data);
         append_log_file(last_conn_id, tail_data);
         parser_log_file(last_conn_id);
       }
