@@ -313,6 +313,8 @@ var watch_file_2 = function(){
   user_name = get_user_name();
   website = get_website(site);
   timestamp = new Date().getTime();
+  create_directory();
+
   tail.on("line", function(tail_data) {
     new_conn_id = get_connection_id_by_data(tail_data);
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
@@ -320,7 +322,6 @@ var watch_file_2 = function(){
         data = {};
         data[new_conn_id] = {};
         last_conn_id = new_conn_id;
-        create_directory();
         append_log_file(last_conn_id, tail_data);
         var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
         var post_query = {
