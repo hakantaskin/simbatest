@@ -341,12 +341,9 @@ var watch_file_2 = function(){
         append_log_file(last_conn_id, linedata);
         parser_log_file(last_conn_id);
       }
-    }
+    }*/
   });
 
-  tail.on("error", function(error) {
-    error_log('Tail Error :' + error);
-  });*/
 }
 
 watch_file_2();
