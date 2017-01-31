@@ -317,6 +317,8 @@ var watch_file_2 = function(){
 
   tail.on("line", function(tail_data) {
     new_conn_id = get_last_conn_id();
+    console.log("New Conn ID : " + new_conn_id);
+    console.log("Last Conn ID: " + last_conn_id);
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
       if(new_conn_id != last_conn_id){
         data = {};
