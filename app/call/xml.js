@@ -290,6 +290,8 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   if(filename != ''){
     file_name = filename;
   }
+  console.log("src" + src);
+  console.log("filename: " + file_name);
   var data = src.read(file_name, 'txt');
   var directions = [];
   var i = 0;
@@ -300,6 +302,7 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
        i++;
     });
   }
+  console.log(directions);
   if(directions.length > 0){
     if (directions[(directions.length - 1)] == 'false'){
       return 'out';
