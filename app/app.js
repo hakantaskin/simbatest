@@ -316,18 +316,13 @@ var watch_file_2 = function(){
   create_directory();
 
   tail.on("line", function(tail_data) {
-    console.log("Tail Data 1: " + tail_data);
-    new_conn_id = get_connection_id_by_data(tail_data);
-    console.log("Tail Data 2:" + tail_data);
+    new_conn_id = get_last_conn_id();
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
-      console.log("Tail Data 3:" + tail_data);
       if(new_conn_id != last_conn_id){
-        console.log("Tail Data 4:" + tail_data);
         data = {};
         data[new_conn_id] = {};
         last_conn_id = new_conn_id;
         append_log_file(last_conn_id, tail_data);
-        console.log("Tail Data 5:" + tail_data);
         /*var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
         var post_query = {
           "connection_id": last_conn_id,
@@ -342,9 +337,7 @@ var watch_file_2 = function(){
           }
         });*/
       } else {
-        console.log("Tail Data 6:" + tail_data);
         append_log_file(last_conn_id, tail_data);
-        console.log("Tail Data 7:" + tail_data);
         //parser_log_file(last_conn_id);
       }
     }
