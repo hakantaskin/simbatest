@@ -40,7 +40,6 @@ export var get_clean_caller_id = function (callerid) {
 
 export var error_log = function (log) {
   var date = new Date().toISOString();
-  console.error(log);
   fs.appendFile(simba_file_path + 'error_log.txt', "[ "+ date +" ] " + log + "\r\n", (err) => {
   if (err) throw err;
   });
@@ -48,7 +47,6 @@ export var error_log = function (log) {
 
 export var info_log = function (log) {
   var date = new Date().toISOString();
-  console.log(log);
   fs.appendFile(simba_file_path + 'info_log.txt', "[ "+ date +" ] " + log + "\r\n", (err) => {
   if (err) throw err;
   });

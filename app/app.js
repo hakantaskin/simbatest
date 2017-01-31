@@ -59,114 +59,6 @@ if(typeof addresses[0] != 'undefined'){
   agentip = addresses[0];
 }
 
-
-//txt dinleme
-var watch_file = function (){
-  var new_conn_id = get_last_conn_id();
-  user_name = get_user_name();
-  website = get_website(site);
-  timestamp = new Date().getTime();
-  var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
-  if(new_conn_id != -1){
-    if(new_conn_id != last_conn_id){
-      data = {};
-      data[new_conn_id] = {};
-      if(last_conn_id == ''){
-        last_conn_id = new_conn_id;
-        return false;
-      }
-      info_log('IF: New Conn ID: ' + new_conn_id + ' / Last Conn: ' + last_conn_id + ' / Token: ' + new_token);
-      last_conn_id = new_conn_id;
-
-      var post_query = {
-        "connection_id": last_conn_id,
-        "website": website,
-        "agentip": agentip
-      };
-      request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          new_token = body;
-          info_log("Conn ID: " + new_conn_id + " / Token data event token: " + new_token);
-          notifier_api();
-        } else {
-          info_log("Server error status code: " + response.statusCode);
-        }
-      });
-    } else {
-      notifier_api();
-    }
-  }
-};
-
-var notifier_api = function(funct_token) {
-  funct_token = new_token;
-  var new_connection_id = get_last_conn_id();
-  if(typeof data[new_connection_id]['last_direction'] != 'undefined' && typeof data[new_connection_id]['caller_id'] != 'undefined'){
-    if(data[new_connection_id]['last_direction'] == true && data[new_connection_id]['caller_id'] == true){
-      return true;
-    }
-  }
-  var site = jetpack.read(simba_file_path + 'site.txt', 'txt');
-  if (site == '') {
-    return false;
-  }
-  var map_key = [];
-  var map_value = [];
-
-  caller_id = get_caller_id(new_connection_id);
-  last_direction = get_last_direction();
-  if(last_direction != ''){
-      data[new_connection_id].last_direction = true;
-  }
-
-  if(funct_token == ''){
-    info_log('Token not found');
-    return false;
-  }
-
-  if (env.api_url.length < 1) {
-    error_log("Api url not found");
-    return false;
-  }
-
-  map_key = ["[agent]", "[token]"];
-  map_value = [user_name, funct_token];
-  temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
-
-  var post_query = {
-    "token": funct_token,
-    "direction": last_direction,
-    "caller": caller_id,
-    "agentip": agentip
-  };
-
-  request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      info_log('Conn ID: ' + new_connection_id + ' / Token: '+ funct_token +' / Simba calllogs post ok.');
-    } else {
-      error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
-    }
-  });
-  if(caller_id != ''){
-    var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
-    var map_screen_value = [caller_id, site, funct_token];
-
-    var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-    if(open_window_token != "callerid_" + caller_id + "_connectionid_" + new_connection_id) {
-      open_window_token = "callerid_" + caller_id + "_connectionid_" + new_connection_id;
-        var call_screen_options = {
-          width: 800,
-          height:600
-        }
-        if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-          data[new_connection_id].caller_id = true;
-          var win2 = ipcRenderer.send('newwindow', [funct_token, screen_temp_url, caller_id, website, user_name]);
-        }
-        // Create a new window
-    }
-  }
-};
-
 var get_today = function(){
   var today = new Date();
   var dd = today.getDate();
@@ -306,7 +198,7 @@ var parser_log_file = function(connectionid){
   }
 }
 
-var watch_file_2 = function(){
+var watch_file = function(){
   var last_conn_id = get_last_conn_id();
   var new_conn_id = '';
   var tail = new Tail(log_file);
@@ -317,15 +209,13 @@ var watch_file_2 = function(){
 
   tail.on("line", function(tail_data) {
     new_conn_id = get_last_conn_id();
-    console.log("New Conn ID : " + new_conn_id);
-    console.log("Last Conn ID: " + last_conn_id);
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
       if(new_conn_id != last_conn_id){
         data = {};
         data[new_conn_id] = {};
         last_conn_id = new_conn_id;
         append_log_file(last_conn_id, tail_data);
-        /*var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
+        var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
         var post_query = {
           "connection_id": last_conn_id,
           "website": website,
@@ -335,9 +225,9 @@ var watch_file_2 = function(){
           if (!error && response.statusCode == 200) {
             //parser_log_file(last_conn_id);
           } else {
-            info_log("Server error status code: " + response.statusCode);
+            error_log("Server error status code: " + response.statusCode);
           }
-        });*/
+        });
       } else {
         append_log_file(last_conn_id, tail_data);
         //parser_log_file(last_conn_id);
@@ -347,4 +237,4 @@ var watch_file_2 = function(){
 
 }
 
-watch_file_2();
+watch_file();
