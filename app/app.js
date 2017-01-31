@@ -219,7 +219,7 @@ var create_log_file = function(connectionid){
 
 var append_log_file = function(connectionid, tail_data){
   var filename = get_log_path() + connectionid + ".txt";
-  fs.open(filename,'r',function(err, fd){
+  fs.open(filename,'w+',function(err, fd){
     if (!err) {
       fs.appendFile(filename, '\r\n' + tail_data, function(err) {
           if(err) {
@@ -227,7 +227,7 @@ var append_log_file = function(connectionid, tail_data){
           }
       });
     } else {
-      fs.writeFile(filename, tail_data, function(err) {
+      fs.writeFile(filename, '\r\n' + tail_data, function(err) {
           if(err) {
               error_log(err);
           }
