@@ -111,7 +111,9 @@ var create_log_file = function(connectionid){
 
 var append_log_file = function(connectionid, tail_data){
   var filename = get_log_path() + connectionid + ".txt";
-  fs.open(filename,'w+',function(err, fd){
+  fs.open(filename,'r',function(err, fd){
+    console.log("fd:" + fd);
+    console.log("err: " + err);
     if (!err) {
       fs.appendFile(filename, '\r\n' + tail_data, function(err) {
           if(err) {
