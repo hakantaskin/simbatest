@@ -221,16 +221,17 @@ var watch_file = function(){
           "website": website,
           "agentip": agentip
         };
-        request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, token) {
+        request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
           if (!error && response.statusCode == 200) {
-            //parser_log_file(last_conn_id);
+            token = response_token;
+            parser_log_file(last_conn_id);
           } else {
             error_log("Server error status code: " + response.statusCode);
           }
         });
       } else {
         append_log_file(last_conn_id, tail_data);
-        //parser_log_file(last_conn_id);
+        parser_log_file(last_conn_id);
       }
     }
   });
