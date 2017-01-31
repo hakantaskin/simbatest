@@ -213,6 +213,8 @@ var watch_file = function(){
       if(new_conn_id != last_conn_id){
         data = {};
         data[new_conn_id] = {};
+        data[new_conn_id]['last_direction'] = false;
+        data[new_conn_id]['caller_id'] = false;
         last_conn_id = new_conn_id;
         append_log_file(last_conn_id, tail_data);
         var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
