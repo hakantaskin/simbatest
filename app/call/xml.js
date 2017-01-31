@@ -290,8 +290,12 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   if(filename != ''){
     file_name = filename;
   }
-  console.log("src" + src);
+  console.log("****** SRC *****")
+  console.log(src);
+  console.log("****** FILE NAME *****");
   console.log("filename: " + file_name);
+  console.log("***** PATH *******");
+  console.log(path_log_files);
   var data = src.read(file_name, 'txt');
   var directions = [];
   var i = 0;
