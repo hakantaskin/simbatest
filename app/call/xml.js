@@ -297,6 +297,8 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   console.log("***** PATH *******");
   console.log(path_log_files);
   var data = src.read(file_name, 'txt');
+  console.log("********** data ********");
+  console.log(data);
   var directions = [];
   var i = 0;
   var match_result = data.match(/<incoming>(.*?)<\/incoming>/g);
@@ -306,6 +308,7 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
        i++;
     });
   }
+  console.log("******* directions *******");
   console.log(directions);
   if(directions.length > 0){
     if (directions[(directions.length - 1)] == 'false'){
