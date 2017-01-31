@@ -132,6 +132,7 @@ var append_log_file = function(connectionid, tail_data){
 var parser_log_file = function(connectionid){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
+  console.log(data);
   if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
     if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
       return true;
