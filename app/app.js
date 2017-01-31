@@ -112,8 +112,6 @@ var create_log_file = function(connectionid){
 var append_log_file = function(connectionid, tail_data){
   var filename = get_log_path() + connectionid + ".txt";
   fs.open(filename,'r',function(err, fd){
-    console.log("fd:" + fd);
-    console.log("err: " + err);
     if (!err) {
       fs.appendFile(filename, '\r\n' + tail_data, function(err) {
           if(err) {
@@ -149,7 +147,7 @@ var parser_log_file = function(connectionid){
   var caller_id = get_caller_id(connectionid, path_log_files, filename);
   var last_direction = get_last_direction(path_log_files, filename);
   if(last_direction != ''){
-      data[new_connection_id].last_direction = true;
+      data[connectionid].last_direction = true;
   }
 
   if(token == ''){
@@ -192,7 +190,7 @@ var parser_log_file = function(connectionid){
           height:600
         }
         if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-          data[new_connection_id].caller_id = true;
+          data[connectionid].caller_id = true;
           var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name]);
         }
         // Create a new window
