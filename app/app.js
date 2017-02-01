@@ -135,8 +135,8 @@ var get_generate_filename = function(connectionid){
 
 var re_parser_direction = function(connectionid, token, agent){
   var direction = get_last_direction(get_log_path(), get_generate_filename(connectionid));
-  map_key = ["[agent]", "[token]"];
-  map_value = [agent, token];
+  var map_key = ["[agent]", "[token]"];
+  var map_value = [agent, token];
   temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
   if(direction != null){
     var post_query = {
