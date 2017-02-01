@@ -256,7 +256,6 @@ var watch_file = function(){
         request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
           if (!error && response.statusCode == 200) {
             token = response_token;
-            re_parser_direction(last_conn_id, token, user_name);
             parser_log_file(last_conn_id);
           } else {
             error_log("Server error status code: " + response.statusCode);
