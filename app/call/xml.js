@@ -94,6 +94,7 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
   var caller_id_last_string = '';
   var incoming_strings = [];
   var incoming_last_string = '';
+  console.log(data);
   var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g);
   if(result != null){
     result.map(function(val){
@@ -290,15 +291,7 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   if(filename != ''){
     file_name = filename;
   }
-  console.log("****** SRC *****")
-  console.log(src);
-  console.log("****** FILE NAME *****");
-  console.log("filename: " + file_name);
-  console.log("***** PATH *******");
-  console.log(path_log_files);
   var data = src.read(file_name, 'txt');
-  console.log("********** data ********");
-  console.log(data);
   var directions = [];
   var i = 0;
   var match_result = data.match(/<incoming>(.*?)<\/incoming>/g);
@@ -308,8 +301,6 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
        i++;
     });
   }
-  console.log("******* directions *******");
-  console.log(directions);
   if(directions.length > 0){
     if (directions[(directions.length - 1)] == 'false'){
       return 'out';
