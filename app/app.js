@@ -133,6 +133,28 @@ var get_generate_filename = function(connectionid){
   return connectionid + ".txt";
 }
 
+var re_parser_direction = function(connectionid, token, agent){
+  var direction = get_last_direction(get_log_path(), get_generate_filename(connectionid));
+  map_key = ["[agent]", "[token]"];
+  map_value = [agent, token];
+  temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
+  if(direction != null){
+    var post_query = {
+      "token": token,
+      "direction": direction
+    };
+    request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+      } else {
+        error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
+      }
+    });
+    return true;
+  } else {
+    re_parser_direction(connectionid, token);
+  }
+}
+
 var parser_log_file = function(connectionid){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
@@ -186,8 +208,8 @@ var parser_log_file = function(connectionid){
     var map_screen_value = [caller_id, site, token];
 
     var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-    if(open_window_token != "callerid_" + caller_id + "_connectionid_" + connectionid) {
-      open_window_token = "callerid_" + caller_id + "_connectionid_" + connectionid;
+    if(open_window_token != "token_" + token + "_connectionid_" + connectionid) {
+      open_window_token = "token_" + token + "_connectionid_" + connectionid;
         var call_screen_options = {
           width: 800,
           height:600
@@ -214,6 +236,7 @@ var watch_file = function(){
     new_conn_id = get_last_conn_id();
     if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
       if(new_conn_id != last_conn_id){
+        re_parser_direction(last_conn_id, token, user_name);
         data = {};
         data[new_conn_id] = {};
         data[new_conn_id]['last_direction'] = false;

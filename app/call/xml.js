@@ -307,9 +307,9 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
     } else {
       return 'in';
     }
-  } else {
-    return '';
   }
+  
+  return '';
 }
 
 export var get_user_name = function () {
