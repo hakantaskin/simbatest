@@ -139,6 +139,7 @@ var re_parser_direction = function(connectionid, token, agent){
   console.log("token: " + token);
   console.log("agent : " + agent);
   var direction = get_last_direction(get_log_path(), get_generate_filename(connectionid));
+  console.log("direction" + direction);
   var map_key = ["[agent]", "[token]"];
   var map_value = [agent, token];
   temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
@@ -155,7 +156,7 @@ var re_parser_direction = function(connectionid, token, agent){
     });
     return true;
   } else {
-    re_parser_direction(connectionid, token);
+    re_parser_direction(connectionid, token, agent);
   }
 }
 
