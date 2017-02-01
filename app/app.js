@@ -129,6 +129,10 @@ var append_log_file = function(connectionid, tail_data){
   return true;
 }
 
+var get_generate_filename = function(connectionid){
+  return connectionid + ".txt";
+}
+
 var parser_log_file = function(connectionid){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
@@ -145,8 +149,8 @@ var parser_log_file = function(connectionid){
   var map_key = [];
   var map_value = [];
 
-  var caller_id = get_caller_id(connectionid, path_log_files, filename);
-  var last_direction = get_last_direction(path_log_files, filename);
+  var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
+  var last_direction = get_last_direction(path_log_files, get_generate_filename(connectionid));
   if(last_direction != ''){
       data[connectionid].last_direction = true;
   }
@@ -174,7 +178,6 @@ var parser_log_file = function(connectionid){
 
   request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      info_log('Conn ID: ' + connectionid + ' / Token: '+ token +' / Simba calllogs post ok.');
     } else {
       error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
     }
