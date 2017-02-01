@@ -318,6 +318,29 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
   return '';
 }
 
+export var get_last_direction_by_taildata = function (data) {
+  var directions = [];
+  var i = 0;
+  if(typeof data != 'undefined'){
+    var match_result = data.match(/<incoming>(.*?)<\/incoming>/g);
+    if(match_result != null){
+      var result = match_result.map(function(val){
+         directions[i] = val.replace(/<\/?incoming>/g,'');
+         i++;
+      });
+    }
+    if(directions.length > 0){
+      if (directions[(directions.length - 1)] == 'false'){
+        return 'out';
+      } else {
+        return 'in';
+      }
+    }
+  }
+
+  return '';
+}
+
 export var get_user_name = function () {
   var file_name = 'config.xml';
   var path = app.getPath('appData'); // appData ile degisecek

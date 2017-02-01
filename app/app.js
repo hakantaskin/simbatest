@@ -6,7 +6,7 @@ import { get_website, url_generate, get_clean_caller_id, error_log, info_log } f
 import jetpack from 'fs-jetpack';
 import { get_caller_id, get_last_conn_id, get_user_name,
          get_last_direction, get_last_call_id, get_files_url,
-         get_log_files_url, get_connection_id_by_data } from './call/xml';
+         get_log_files_url, get_connection_id_by_data, get_last_direction_by_taildata } from './call/xml';
 import env from './env';
 
 var os = require('os');
@@ -133,34 +133,7 @@ var get_generate_filename = function(connectionid){
   return connectionid + ".txt";
 }
 
-var re_parser_direction = function(connectionid, token, agent){
-  console.log("DIRECTION");
-  console.log("connectionid: " + connectionid);
-  console.log("token: " + token);
-  console.log("agent : " + agent);
-  var direction = get_last_direction(get_log_path(), get_generate_filename(connectionid));
-  console.log("direction: " + direction);
-  var map_key = ["[agent]", "[token]"];
-  var map_value = [agent, token];
-  temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
-  if(direction != null && direction != ''){
-    var post_query = {
-      "token": token,
-      "direction": direction
-    };
-    request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-      } else {
-        error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
-      }
-    });
-    return true;
-  } else {
-    re_parser_direction(connectionid, token, agent);
-  }
-}
-
-var parser_log_file = function(connectionid){
+var parser_log_file = function(connectionid, tail_data){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
   if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
@@ -176,7 +149,7 @@ var parser_log_file = function(connectionid){
   var map_value = [];
 
   var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
-  var last_direction = get_last_direction(path_log_files, get_generate_filename(connectionid));
+  var last_direction = get_last_direction_by_taildata(tail_data);
   if(last_direction != ''){
       data[connectionid].last_direction = true;
   }
@@ -256,14 +229,14 @@ var watch_file = function(){
         request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
           if (!error && response.statusCode == 200) {
             token = response_token;
-            parser_log_file(last_conn_id);
+            parser_log_file(last_conn_id, tail_data);
           } else {
             error_log("Server error status code: " + response.statusCode);
           }
         });
       } else {
         append_log_file(last_conn_id, tail_data);
-        parser_log_file(last_conn_id);
+        parser_log_file(last_conn_id, tail_data);
       }
     }
   });
