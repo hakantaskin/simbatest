@@ -152,6 +152,8 @@ var parser_log_file = function(connectionid){
   var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
   var last_direction = get_last_direction(path_log_files, get_generate_filename(connectionid));
   if(last_direction != ''){
+    console.log("********* LAST DIRECTION ***********");
+    console.log("Last direction:" + last_direction);
       data[connectionid].last_direction = true;
   }
 
