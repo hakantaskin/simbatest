@@ -143,7 +143,7 @@ var re_parser_direction = function(connectionid, token, agent){
   var map_key = ["[agent]", "[token]"];
   var map_value = [agent, token];
   temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
-  if(direction != null){
+  if(direction != null && direction != ''){
     var post_query = {
       "token": token,
       "direction": direction
