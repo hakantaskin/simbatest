@@ -186,8 +186,8 @@ var parser_log_file = function(connectionid, tail_data){
     var map_screen_value = [caller_id, site, token];
 
     var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-    if(open_window_token != "token_" + token + "_connectionid_" + connectionid) {
-      open_window_token = "token_" + token + "_connectionid_" + connectionid;
+    if(open_window_token != "_connectionid_" + connectionid) {
+      open_window_token = "_connectionid_" + connectionid;
         var call_screen_options = {
           width: 800,
           height:600
