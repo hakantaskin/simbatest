@@ -78,8 +78,12 @@ var get_log_path = function(){
   return simba_log_file_path + get_today() + '\\';
 }
 
+var get_log_path_2 = function(){
+  return simba_log_file_path + get_today();
+}
+
 var create_directory = function(){
-  var log_path = get_log_path();
+  var log_path = get_log_path_2();
     if (!fs.exists(log_path)){
       try {
         fs.mkdir(log_path);
@@ -240,7 +244,6 @@ var watch_file = function(){
       }
     }
   });
-
 }
 
 watch_file();
