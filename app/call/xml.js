@@ -94,8 +94,12 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
   var caller_id_last_string = '';
   var incoming_strings = [];
   var incoming_last_string = '';
-  console.log(data);
-  var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g);
+  if(typeof data != 'undefined'){
+      var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g);
+  } else {
+    var result = null;
+  }
+
   if(result != null){
     result.map(function(val){
       if(val.length > 0){
@@ -310,7 +314,7 @@ export var get_last_direction = function (path_log_files = '', filename = '') {
       }
     }
   }
-  
+
   return '';
 }
 

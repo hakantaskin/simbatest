@@ -134,6 +134,10 @@ var get_generate_filename = function(connectionid){
 }
 
 var re_parser_direction = function(connectionid, token, agent){
+  console.log("DIRECTION");
+  console.log("connectionid: " + connectionid);
+  console.log("token: " + token);
+  console.log("agent : " + agent);
   var direction = get_last_direction(get_log_path(), get_generate_filename(connectionid));
   var map_key = ["[agent]", "[token]"];
   var map_value = [agent, token];
