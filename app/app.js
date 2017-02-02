@@ -136,10 +136,12 @@ var get_generate_filename = function(connectionid){
 var parser_log_file = function(connectionid, tail_data){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
-  if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
-    if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
-      if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
-        return true;
+  if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
+    if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
+      if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
+        if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
+          return true;
+        }
       }
     }
   }
