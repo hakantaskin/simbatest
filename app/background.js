@@ -76,6 +76,7 @@ var create_directory = function(){
 
 let tray = null
 app.on('ready', function () {
+    create_directory();
     tray = new Tray('C:/Simbalauncher/icon.ico');
     tray.setToolTip('Simba is running.');
     setApplicationMenu();
