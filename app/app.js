@@ -82,7 +82,11 @@ var create_directory = function(){
   var log_path = get_log_path();
   fs.stat(log_path, function(err, stats) {
     if(err){
-      fs.mkdir(log_path);
+      try{
+        fs.mkdir(log_path);
+      } catch(try_error){
+        error_log(try_error);
+      }
     }
   });
   return log_path;
@@ -110,22 +114,28 @@ var create_log_file = function(connectionid){
 }
 
 var append_log_file = function(connectionid, tail_data){
+  create_directory();
   var filename = get_log_path() + connectionid + ".txt";
-  fs.open(filename,'r',function(err, fd){
-    if (!err) {
-      fs.appendFile(filename, '\r\n' + tail_data, function(err) {
-          if(err) {
-              error_log(err);
-          }
-      });
-    } else {
-      fs.writeFile(filename, '\r\n' + tail_data, function(err) {
-          if(err) {
-              error_log(err);
-          }
-      });
-    }
-  });
+  try{
+    fs.open(filename,'r',function(err, fd){
+      if (!err) {
+        fs.appendFile(filename, '\r\n' + tail_data, function(err) {
+            if(err) {
+                error_log(err);
+            }
+        });
+      } else {
+        fs.writeFile(filename, '\r\n' + tail_data, function(err) {
+            if(err) {
+                error_log(err);
+            }
+        });
+      }
+    });
+  } catch(try_error){
+    error_log(try_error);
+  }
+
   return true;
 }
 
@@ -213,7 +223,6 @@ var watch_file = function(){
   user_name = get_user_name();
   website = get_website(site);
   timestamp = new Date().getTime();
-  create_directory();
 
   tail.on("line", function(tail_data) {
     new_conn_id = get_last_conn_id();

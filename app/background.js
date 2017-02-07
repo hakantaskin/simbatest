@@ -14,6 +14,27 @@ const fs = require('fs');
 // in config/env_xxx.json file.
  // module loaded from npm
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
+var simba_log_file_path = 'C:\\Simbalauncher\\Simba\\Log\\';
+
+var get_today = function(){
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+
+  var yyyy = today.getFullYear();
+  if(dd<10){
+      dd='0'+dd;
+  }
+  if(mm<10){
+      mm='0'+mm;
+  }
+  return yyyy+'_'+mm+'_'+dd;
+}
+
+var get_log_path = function(){
+  return simba_log_file_path + get_today() + '\\';
+}
+
 import env from './env';
 var site = jetpack.read( simba_file_path + 'site.txt', 'txt');
 var server_ip = jetpack.read( simba_file_path + 'server_ip.txt', 'txt');
@@ -42,6 +63,16 @@ var setApplicationMenu = function () {
     menus.push(prodMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
+
+var create_directory = function(){
+  var log_path = get_log_path();
+  fs.stat(log_path, function(err, stats) {
+    if(err){
+      fs.mkdir(log_path);
+    }
+  });
+  return log_path;
+}
 
 let tray = null
 app.on('ready', function () {
