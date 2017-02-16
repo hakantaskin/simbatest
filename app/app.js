@@ -115,27 +115,31 @@ var create_log_file = function(connectionid){
 
 var append_log_file = function(connectionid, tail_data){
   create_directory();
-  var filename = get_log_path() + connectionid + ".txt";
-  try{
-    fs.open(filename,'r',function(err, fd){
-      if (!err) {
-        fs.appendFile(filename, '\r\n' + tail_data, function(err) {
-            if(err) {
-                error_log(err);
-            }
+  var log_path = get_log_path();
+  fs.stat(log_path, function(err, stats) {
+    if(!err){
+      var filename = get_log_path() + connectionid + ".txt";
+      try{
+        fs.open(filename,'r',function(err, fd){
+          if (!err) {
+            fs.appendFile(filename, '\r\n' + tail_data, function(err) {
+                if(err) {
+                    error_log(err);
+                }
+            });
+          } else {
+            fs.writeFile(filename, '\r\n' + tail_data, function(err) {
+                if(err) {
+                    error_log(err);
+                }
+            });
+          }
         });
-      } else {
-        fs.writeFile(filename, '\r\n' + tail_data, function(err) {
-            if(err) {
-                error_log(err);
-            }
-        });
+      } catch(try_error){
+        error_log(try_error);
       }
-    });
-  } catch(try_error){
-    error_log(try_error);
-  }
-
+    }
+  });
   return true;
 }
 
