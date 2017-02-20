@@ -1,7 +1,9 @@
 const app = require('electron').remote.app
 import jetpack from 'fs-jetpack'; // module loaded from npm
+var fs = require('fs');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
+var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 
 var files = "\\Avaya\\Avaya one-X Communicator\\";
 var log_files = "\\Avaya\\Avaya one-X Communicator\\Log Files\\";
@@ -12,6 +14,13 @@ function isNumeric(n) {
 
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, 'g'), replace);
+}
+
+var info_log = function (log) {
+  var date = new Date().toISOString();
+  fs.appendFile(simba_file_path + 'info_log.txt', "[ "+ date +" ] " + log + "\r\n", (err) => {
+  if (err) throw err;
+  });
 }
 
 var get_caller_id_parse = function (data) {
