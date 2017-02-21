@@ -98,11 +98,10 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
   fs.stat(path_log_files + file_name, function (err, stats) {
         if (err) {
             info_log(err);
-            return false; // exit here since stats will be undefined
+            return ''; // exit here since stats will be undefined
         } else {
           console.log(path_log_files + file_name);
           var data = gracefulFs.readFileSync(path_log_files + file_name).toString();
-          console.log(data.toString());
           var callerids = [];
           var connection_ids = [];
           var last_connection_id = 0;
@@ -176,7 +175,7 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
           return caller_id;
         }
   });
-
+  return '';
 };
 
 var get_caller_id_2 = function (last_conn_id) {
