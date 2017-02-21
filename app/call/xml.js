@@ -88,14 +88,15 @@ var get_caller_id_parse = function (data) {
 export var get_caller_id = function (last_conn_id, path_log_files = '', filename = '') {
   var file_name = 'onexcapi.txt';
   var path = app.getPath('appData');
-  var src = jetpack.cwd(path + log_files);
+  var src = path + log_files;
   if(path_log_files != ''){
-    src = jetpack.cwd(path_log_files);
+    src = path_log_files;
   }
   if(filename != ''){
     file_name = filename;
   }
-  var data = src.read(file_name, 'txt');
+  console.log(path_log_files + '/' +file_name);
+  var data = gracefulFs.readFileSync(path_log_files + '/' +file_name);
   var callerids = [];
   var connection_ids = [];
   var last_connection_id = 0;
