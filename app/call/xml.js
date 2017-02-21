@@ -98,8 +98,10 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
   fs.stat(path_log_files + file_name, function (err, stats) {
         if (err) {
             info_log(err);
+            console.log(err);
             return ''; // exit here since stats will be undefined
         } else {
+          console.log("File var");
           console.log(path_log_files + file_name);
           var data = gracefulFs.readFileSync(path_log_files + file_name).toString();
           var callerids = [];
