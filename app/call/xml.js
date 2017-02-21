@@ -96,7 +96,6 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
     file_name = filename;
   }
   try{
-    console.log(path_log_files + file_name);
     var data = gracefulFs.readFileSync(path_log_files + file_name).toString();
     var callerids = [];
     var connection_ids = [];
