@@ -8,6 +8,8 @@
     var env = require('./../env');
     var jsonfile = require('jsonfile');
     var fs = require('fs');
+    var gracefulFs = require('graceful-fs');
+    gracefulFs.gracefulify(fs);
     var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 
     console.log('Loaded environment variables:', env);

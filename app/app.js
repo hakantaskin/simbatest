@@ -11,6 +11,8 @@ import env from './env';
 
 var os = require('os');
 var fs = require('fs');
+var gracefulFs = require('graceful-fs');
+gracefulFs.gracefulify(fs);
 const http = require('http');
 const Tail = require('tail').Tail;
 

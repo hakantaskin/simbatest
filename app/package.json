@@ -11,7 +11,8 @@
     "xml2js": "^0.4.17",
     "request": "^2.74.0",
     "jsonfile": "^2.3.1",
-    "tail": "^1.2.1"
+    "tail": "^1.2.1",
+    "graceful.js": "^1.0.0"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {

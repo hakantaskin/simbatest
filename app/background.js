@@ -10,6 +10,8 @@ import createWindow from './helpers/window';
 import jetpack from 'fs-jetpack';
 import { error_log, info_log } from './helpers/quick';
 const fs = require('fs');
+var gracefulFs = require('graceful-fs');
+gracefulFs.gracefulify(fs);
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
  // module loaded from npm

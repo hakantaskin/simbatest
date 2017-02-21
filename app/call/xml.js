@@ -1,6 +1,8 @@
 const app = require('electron').remote.app
 import jetpack from 'fs-jetpack'; // module loaded from npm
 var fs = require('fs');
+var gracefulFs = require('graceful-fs');
+gracefulFs.gracefulify(fs);
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
