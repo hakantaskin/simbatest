@@ -95,89 +95,83 @@ export var get_caller_id = function (last_conn_id, path_log_files = '', filename
   if(filename != ''){
     file_name = filename;
   }
-  fs.stat(path_log_files + file_name, function (err, stats) {
-        if (err) {
-            info_log(err);
-            console.log(err);
-            return ''; // exit here since stats will be undefined
-        } else {
-          console.log("File var");
-          console.log(path_log_files + file_name);
-          var data = gracefulFs.readFileSync(path_log_files + file_name).toString();
-          var callerids = [];
-          var connection_ids = [];
-          var last_connection_id = 0;
-          var i = 0;
-          var connectionId_i = 0;
-          var caller_id = '';
-          var caller_id_last_string = '';
-          var incoming_strings = [];
-          var incoming_last_string = '';
-          if(typeof data != 'undefined'){
-              var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g);
-          } else {
-            var result = null;
-          }
+  try{
+    console.log(path_log_files + file_name);
+    var data = gracefulFs.readFileSync(path_log_files + file_name).toString();
+    var callerids = [];
+    var connection_ids = [];
+    var last_connection_id = 0;
+    var i = 0;
+    var connectionId_i = 0;
+    var caller_id = '';
+    var caller_id_last_string = '';
+    var incoming_strings = [];
+    var incoming_last_string = '';
+    if(typeof data != 'undefined'){
+        var result = data.match(/<IncomingSessionEvent xmlns="http:\/\/xml.avaya.com\/endpointAPI">[\s\S]*?<\/IncomingSessionEvent>/g);
+    } else {
+      var result = null;
+    }
 
-          if(result != null){
-            result.map(function(val){
-              if(val.length > 0){
-                incoming_strings[i] = val;
-                i++;
+    if(result != null){
+      result.map(function(val){
+        if(val.length > 0){
+          incoming_strings[i] = val;
+          i++;
+        }
+      });
+      if(incoming_strings.length > 0){
+        incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
+        if(incoming_last_string != ''){
+          var result_connection = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g);
+          if(result_connection != null){
+            var result_connection_id = result_connection.map(function(val_connection){
+              if(val_connection.length > 0){
+                connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
+                connectionId_i++;
               }
             });
-            if(incoming_strings.length > 0){
-              incoming_last_string = incoming_strings[(incoming_strings.length - 1)];
-              if(incoming_last_string != ''){
-                var result_connection = incoming_last_string.match(/<connectionId>(.*?)<\/connectionId>/g);
-                if(result_connection != null){
-                  var result_connection_id = result_connection.map(function(val_connection){
-                    if(val_connection.length > 0){
-                      connection_ids[connectionId_i] = val_connection.replace(/<\/?connectionId>/g,'');
-                      connectionId_i++;
-                    }
-                  });
+          }
+          if(connection_ids.length > 0){
+            if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
+                last_connection_id = connection_ids[(connection_ids.length - 1)];
+                caller_id_last_string = incoming_last_string;
+                caller_id = get_caller_id_parse(caller_id_last_string);
+                if(caller_id != '' && caller_id != '444'){
+                  return caller_id;
                 }
-                if(connection_ids.length > 0){
-                  if(connection_ids[(connection_ids.length - 1)] == last_conn_id){
-                      last_connection_id = connection_ids[(connection_ids.length - 1)];
-                      caller_id_last_string = incoming_last_string;
-                      caller_id = get_caller_id_parse(caller_id_last_string);
-                      if(caller_id != '' && caller_id != '444'){
-                        return caller_id;
-                      }
-                  }
-                } else {
-                  info_log('connection id not found');
-                }
-              }
             }
+          } else {
+            info_log('connection id not found');
           }
-
-          var caller_id_2 = get_caller_id_2(last_conn_id);
-          if(caller_id_2 != ''){
-            last_connection_id = connection_ids[(connection_ids.length - 1)];
-            caller_id_last_string = caller_id_2;
-            caller_id = get_caller_id_parse(caller_id_last_string);
-            if(caller_id != '' && caller_id != '444'){
-              return caller_id;
-            }
-          }
-
-          var caller_id_3 = get_caller_id_3(last_conn_id)
-          if(caller_id_3 != ''){
-            last_connection_id = connection_ids[(connection_ids.length - 1)];
-            caller_id_last_string = caller_id_3;
-            caller_id = get_caller_id_parse(caller_id_last_string);
-            if(caller_id != '' && caller_id != '444'){
-              return caller_id;
-            }
-          }
-
-          return caller_id;
         }
-  });
-  return '';
+      }
+    }
+
+    var caller_id_2 = get_caller_id_2(last_conn_id);
+    if(caller_id_2 != ''){
+      last_connection_id = connection_ids[(connection_ids.length - 1)];
+      caller_id_last_string = caller_id_2;
+      caller_id = get_caller_id_parse(caller_id_last_string);
+      if(caller_id != '' && caller_id != '444'){
+        return caller_id;
+      }
+    }
+
+    var caller_id_3 = get_caller_id_3(last_conn_id)
+    if(caller_id_3 != ''){
+      last_connection_id = connection_ids[(connection_ids.length - 1)];
+      caller_id_last_string = caller_id_3;
+      caller_id = get_caller_id_parse(caller_id_last_string);
+      if(caller_id != '' && caller_id != '444'){
+        return caller_id;
+      }
+    }
+
+    return caller_id;
+  } catch (try_err){
+    info_log(try_err);
+  }
 };
 
 var get_caller_id_2 = function (last_conn_id) {
