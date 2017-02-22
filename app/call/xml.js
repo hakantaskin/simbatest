@@ -301,6 +301,9 @@ export var get_last_conn_id = function () {
 }
 
 export var get_last_direction = function (last_conn_id, path_log_files = '', filename = '') {
+  var file_name = 'onexcapi.txt';
+  var path = app.getPath('appData');
+  var src = path + log_files;
   if(path_log_files != ''){
     src = path_log_files;
   }
