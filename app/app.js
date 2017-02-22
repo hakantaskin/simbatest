@@ -19,11 +19,16 @@ const Tail = require('tail').Tail;
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 var simba_log_file_path = 'C:\\Simbalauncher\\Simba\\Log\\';
-var site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
+var site = '';
+try{
+  site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
+} catch(site_err){
+  console.log(site_err);
+  info_log(site_err);
+}
 var server_ip_text = '';
-fs.readFile(simba_file_path + 'server_ip.txt', function (err, server_ip) {
-  server_ip_text = server_ip;
-});
+server_ip_text = gracefulFs.readFileSync(simba_file_path + 'server_ip.txt').toString();
+
 var caller_id = '';
 var last_conn_id = '';
 var user_name = '';

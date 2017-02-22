@@ -300,17 +300,14 @@ export var get_last_conn_id = function () {
   }
 }
 
-export var get_last_direction = function (path_log_files = '', filename = '') {
-  var file_name = 'onexcapi.txt';
-  var path = app.getPath('appData'); // appData ile degisecek
-  var src = jetpack.cwd(path + log_files);
+export var get_last_direction = function (last_conn_id, path_log_files = '', filename = '') {
   if(path_log_files != ''){
-    src = jetpack.cwd(path_log_files);
+    src = path_log_files;
   }
   if(filename != ''){
     file_name = filename;
   }
-  var data = src.read(file_name, 'txt');
+  var data = gracefulFs.readFileSync(path_log_files + file_name).toString();
   var directions = [];
   var i = 0;
   if(typeof data != 'undefined'){
