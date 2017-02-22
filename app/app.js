@@ -19,7 +19,7 @@ const Tail = require('tail').Tail;
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 var simba_log_file_path = 'C:\\Simbalauncher\\Simba\\Log\\';
-var site = jetpack.read(simba_file_path + 'site.txt');
+var site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
 var server_ip_text = '';
 fs.readFile(simba_file_path + 'server_ip.txt', function (err, server_ip) {
   server_ip_text = server_ip;
@@ -149,7 +149,7 @@ var get_generate_filename = function(connectionid){
   return connectionid + ".txt";
 }
 
-var parser_log_file = function(connectionid, tail_data){
+var parser_log_file = function(connectionid){
   var filename = get_log_path() + connectionid + ".txt";
   var path_log_files = get_log_path();
   if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
@@ -162,7 +162,7 @@ var parser_log_file = function(connectionid, tail_data){
     }
   }
 
-  var site = jetpack.read(simba_file_path + 'site.txt', 'txt');
+  site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
   if (site == '') {
     return false;
   }
@@ -170,7 +170,7 @@ var parser_log_file = function(connectionid, tail_data){
   var map_value = [];
 
   var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
-  var last_direction = get_last_direction_by_taildata(tail_data);
+  var last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
   if(last_direction != ''){
       data[connectionid].last_direction = true;
   }
@@ -220,6 +220,25 @@ var parser_log_file = function(connectionid, tail_data){
         // Create a new window
     }
   }
+
+  if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
+    if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
+      if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
+        if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
+          return true;
+        } else {
+          setTimeout(function(){parser_log_file(connectionid);}, 2000);
+        }
+      } else {
+        setTimeout(function(){parser_log_file(connectionid);}, 2000);
+      }
+    } else {
+      setTimeout(function(){parser_log_file(connectionid);}, 2000);
+    }
+  } else {
+    setTimeout(function(){parser_log_file(connectionid);}, 2000);
+  }
+  setTimeout(function(){parser_log_file(connectionid);}, 2000);
 }
 
 var watch_file = function(){
@@ -249,14 +268,13 @@ var watch_file = function(){
         request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
           if (!error && response.statusCode == 200) {
             token = response_token;
-            parser_log_file(last_conn_id, tail_data);
+            setTimeout(function(){parser_log_file(last_conn_id);}, 2000);
           } else {
             error_log("Server error status code: " + response.statusCode);
           }
         });
       } else {
         append_log_file(last_conn_id, tail_data);
-        parser_log_file(last_conn_id, tail_data);
       }
     }
   });
