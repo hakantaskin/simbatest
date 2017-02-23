@@ -236,10 +236,10 @@ var parser_log_file = function(connectionid, parser_token){
             width: 800,
             height:600
           }
+          if(caller_id != '' && typeof data[connectionid] != 'undefined'){
+              data[connectionid].caller_id = true;
+          }
           if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-            if(typeof data[connectionid] != 'undefined'){
-                data[connectionid].caller_id = true;
-            }
             var win2 = ipcRenderer.send('newwindow', [parser_token, screen_temp_url, caller_id, website, user_name, connectionid]);
           }
           // Create a new window

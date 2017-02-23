@@ -82,6 +82,9 @@ var get_caller_id_parse = function (data) {
   } else {
     info_log('callerid not found');
   }
+  if(caller_id == '' && caller_id.indexOf('*') == 0){
+    return '*';
+  }
   return caller_id;
 };
 
