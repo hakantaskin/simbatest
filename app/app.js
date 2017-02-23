@@ -23,7 +23,6 @@ var site = '';
 try{
   site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
 } catch(site_err){
-  console.log(site_err);
   info_log(site_err);
 }
 var server_ip_text = '';
@@ -168,9 +167,6 @@ var parser_log_file = function(connectionid){
   }
 
   site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
-  if (site == '') {
-    return false;
-  }
   var map_key = [];
   var map_value = [];
 
@@ -207,7 +203,7 @@ var parser_log_file = function(connectionid){
       error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
     }
   });
-  if(caller_id != ''){
+  if(caller_id != '' && site != ''){
     var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
     var map_screen_value = [caller_id, site, token];
 
