@@ -242,7 +242,11 @@ var parser_log_file = function(connectionid){
             var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name, connectionid]);
           }
           // Create a new window
+      } else {
+        error_log("Window Token birbirine esit : " + open_window_token);
       }
+    } else {
+      error_log("Caller ID :" + caller_id + ' --- Site:' + site);
     }
 
     if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
