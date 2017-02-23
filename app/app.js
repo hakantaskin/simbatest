@@ -257,7 +257,6 @@ var parser_log_file = function(connectionid, parser_token){
             delete data[connectionid];
             return true;
           } else {
-            console.log(data[connectionid]);
             setTimeout(function(){parser_log_file(connectionid, parser_token);}, 1000);
           }
         }
