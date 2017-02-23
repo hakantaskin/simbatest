@@ -173,7 +173,7 @@ var get_generate_filename = function(connectionid){
   return connectionid + ".txt";
 }
 
-var parser_log_file = function(connectionid){
+var parser_log_file = function(connectionid, parser_token){
   try{
     var filename = get_log_path() + connectionid + ".txt";
     var path_log_files = get_log_path();
@@ -198,7 +198,7 @@ var parser_log_file = function(connectionid){
         data[connectionid].last_direction = true;
     }
 
-    if(token == ''){
+    if(parser_token == ''){
       error_log('Token not found');
       return false;
     }
@@ -209,11 +209,11 @@ var parser_log_file = function(connectionid){
     }
 
     map_key = ["[agent]", "[token]"];
-    map_value = [user_name, token];
+    map_value = [user_name, parser_token];
     temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
 
     var post_query = {
-      "token": token,
+      "token": parser_token,
       "direction": last_direction,
       "caller": caller_id,
       "agentip": agentip
@@ -227,7 +227,7 @@ var parser_log_file = function(connectionid){
     });
     if(caller_id != '' && site != ''){
       var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
-      var map_screen_value = [caller_id, site, token];
+      var map_screen_value = [caller_id, site, parser_token];
 
       var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
       if(open_window_token != "_connectionid_" + connectionid) {
@@ -240,7 +240,7 @@ var parser_log_file = function(connectionid){
             if(typeof data[connectionid] != 'undefined'){
                 data[connectionid].caller_id = true;
             }
-            var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name, connectionid]);
+            var win2 = ipcRenderer.send('newwindow', [parser_token, screen_temp_url, caller_id, website, user_name, connectionid]);
           }
           // Create a new window
       } else {
@@ -257,7 +257,7 @@ var parser_log_file = function(connectionid){
             delete data[connectionid];
             return true;
           } else {
-            setTimeout(function(){parser_log_file(connectionid);}, 2000);
+            setTimeout(function(){parser_log_file(connectionid, parser_token);}, 2000);
           }
         }
       }
@@ -296,7 +296,7 @@ var watch_file = function(){
           request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
             if (!error && response.statusCode == 200) {
               token = response_token;
-              setTimeout(function(){parser_log_file(last_conn_id);}, 2000);
+              setTimeout(function(){parser_log_file(last_conn_id, token);}, 2000);
             } else {
               error_log("Server error status code: " + error);
             }
