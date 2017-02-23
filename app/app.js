@@ -154,79 +154,83 @@ var get_generate_filename = function(connectionid){
 }
 
 var parser_log_file = function(connectionid){
-  var filename = get_log_path() + connectionid + ".txt";
-  var path_log_files = get_log_path();
-  if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
-    if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
-      if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
-        if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
-          return true;
+  try{
+    var filename = get_log_path() + connectionid + ".txt";
+    var path_log_files = get_log_path();
+    if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
+      if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
+        if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
+          if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
+            return true;
+          }
         }
       }
     }
-  }
 
-  site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
-  var map_key = [];
-  var map_value = [];
+    site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
+    var map_key = [];
+    var map_value = [];
 
-  var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
-  var last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
-  if(last_direction != ''){
-      data[connectionid].last_direction = true;
-  }
-
-  if(token == ''){
-    error_log('Token not found');
-    return false;
-  }
-
-  if (env.api_url.length < 1) {
-    error_log("Api url not found");
-    return false;
-  }
-
-  map_key = ["[agent]", "[token]"];
-  map_value = [user_name, token];
-  temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
-
-  var post_query = {
-    "token": token,
-    "direction": last_direction,
-    "caller": caller_id,
-    "agentip": agentip
-  };
-
-  request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-    } else {
-      error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
+    var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
+    var last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
+    if(last_direction != ''){
+        data[connectionid].last_direction = true;
     }
-  });
-  if(caller_id != '' && site != ''){
-    var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
-    var map_screen_value = [caller_id, site, token];
 
-    var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
-    if(open_window_token != "_connectionid_" + connectionid) {
-      open_window_token = "_connectionid_" + connectionid;
-        var call_screen_options = {
-          width: 800,
-          height:600
-        }
-        if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-          data[connectionid].caller_id = true;
-          var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name]);
-        }
-        // Create a new window
+    if(token == ''){
+      error_log('Token not found');
+      return false;
     }
-  }
 
-  if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
-    if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
-      if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
-        if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
-          return true;
+    if (env.api_url.length < 1) {
+      error_log("Api url not found");
+      return false;
+    }
+
+    map_key = ["[agent]", "[token]"];
+    map_value = [user_name, token];
+    temp_url = url_generate(server_ip_text + env.api_url, map_key, map_value);
+
+    var post_query = {
+      "token": token,
+      "direction": last_direction,
+      "caller": caller_id,
+      "agentip": agentip
+    };
+
+    request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+      } else {
+        error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
+      }
+    });
+    if(caller_id != '' && site != ''){
+      var map_screen_key = ["[callerid]", "[website]", "[uniqueid]"];
+      var map_screen_value = [caller_id, site, token];
+
+      var screen_temp_url = url_generate(env.call_screen, map_screen_key, map_screen_value);
+      if(open_window_token != "_connectionid_" + connectionid) {
+        open_window_token = "_connectionid_" + connectionid;
+          var call_screen_options = {
+            width: 800,
+            height:600
+          }
+          if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
+            data[connectionid].caller_id = true;
+            var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name]);
+          }
+          // Create a new window
+      }
+    }
+
+    if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
+      if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
+        if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
+          if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
+            return true;
+          } else {
+            setTimeout(function(){parser_log_file(connectionid);}, 2000);
+          }
         } else {
           setTimeout(function(){parser_log_file(connectionid);}, 2000);
         }
@@ -236,10 +240,11 @@ var parser_log_file = function(connectionid){
     } else {
       setTimeout(function(){parser_log_file(connectionid);}, 2000);
     }
-  } else {
     setTimeout(function(){parser_log_file(connectionid);}, 2000);
   }
-  setTimeout(function(){parser_log_file(connectionid);}, 2000);
+  catch(parser_err){
+    error_log(parser_err);
+  }
 }
 
 var watch_file = function(){

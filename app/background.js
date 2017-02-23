@@ -78,6 +78,7 @@ var create_directory = function(){
 
 let tray = null
 app.on('ready', function () {
+  try{
     create_directory();
     tray = new Tray('C:/Simbalauncher/icon.ico');
     tray.setToolTip('Simba is running.');
@@ -138,6 +139,9 @@ app.on('ready', function () {
         );
       });
     });
+  } catch(app_err){
+    error_log(app_err);
+  }
 });
 
 app.on('window-all-closed', function (event) {
