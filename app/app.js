@@ -221,7 +221,7 @@ var parser_log_file = function(connectionid){
     request.post({url:temp_url, form:post_query, json:true}, function (error, response, body) {
       if (!error && response.statusCode == 200) {
       } else {
-        error_log("Server error status code : " + response.statusCode + " url: " + temp_url);
+        error_log("Server error status code : " + error + " url: " + temp_url);
       }
     });
     if(caller_id != '' && site != ''){
@@ -299,7 +299,7 @@ var watch_file = function(){
               token = response_token;
               setTimeout(function(){parser_log_file(last_conn_id);}, 2000);
             } else {
-              error_log("Server error status code: " + response.statusCode);
+              error_log("Server error status code: " + error);
             }
           });
         } else {
