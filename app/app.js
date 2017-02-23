@@ -23,7 +23,7 @@ var site = '';
 try{
   site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
 } catch(site_err){
-  info_log(site_err);
+  info_log(dumpError(site_err));
 }
 var server_ip_text = '';
 server_ip_text = gracefulFs.readFileSync(simba_file_path + 'server_ip.txt').toString();
@@ -41,6 +41,24 @@ var token = '';
 var log_file = get_log_files_url();
 var open_window_token = '';
 var data = {};
+
+
+var dumpError = function(err) {
+  var msg = '';
+  if (typeof err === 'object') {
+    if (err.message) {
+      msg += '\nMessage: ' + err.message;
+    }
+    if (err.stack) {
+      msg += '\nStacktrace:';
+      msg += '====================';
+      msg += err.stack;
+    }
+  } else {
+    msg += 'dumpError :: argument is not an object';
+  }
+  return msg;
+}
 // set menu
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate];
@@ -91,7 +109,7 @@ var create_directory = function(){
       try{
         fs.mkdir(log_path);
       } catch(try_error){
-        error_log(try_error);
+        error_log(dumpError(try_error));
       }
     }
   });
@@ -142,7 +160,7 @@ var append_log_file = function(connectionid, tail_data){
           }
         });
       } catch(try_error){
-        error_log(try_error);
+        error_log(dumpError(try_error));
       }
     }
   });
@@ -243,7 +261,7 @@ var parser_log_file = function(connectionid){
     setTimeout(function(){parser_log_file(connectionid);}, 2000);
   }
   catch(parser_err){
-    error_log(parser_err);
+    error_log(dumpError(parser_err));
   }
 }
 
@@ -286,7 +304,7 @@ var watch_file = function(){
       }
     });
   } catch(watch_err){
-    error_log(watch_err);
+    error_log(dumpError(watch_err));
     watch_file();
   }
 }
