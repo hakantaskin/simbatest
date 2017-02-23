@@ -192,8 +192,8 @@ var parser_log_file = function(connectionid){
     var map_key = [];
     var map_value = [];
 
-    caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
-    last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
+    var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
+    var last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
     if(last_direction != '' && typeof data[connectionid] != 'undefined'){
         data[connectionid].last_direction = true;
     }
