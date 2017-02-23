@@ -259,16 +259,9 @@ var parser_log_file = function(connectionid){
           } else {
             setTimeout(function(){parser_log_file(connectionid);}, 2000);
           }
-        } else {
-          setTimeout(function(){parser_log_file(connectionid);}, 2000);
         }
-      } else {
-        setTimeout(function(){parser_log_file(connectionid);}, 2000);
       }
-    } else {
-      setTimeout(function(){parser_log_file(connectionid);}, 2000);
     }
-    setTimeout(function(){parser_log_file(connectionid);}, 2000);
   }
   catch(parser_err){
     error_log(dumpError(parser_err));
