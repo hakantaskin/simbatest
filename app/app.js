@@ -16,6 +16,8 @@ gracefulFs.gracefulify(fs);
 const http = require('http');
 const Tail = require('tail').Tail;
 
+window['console']['error'] = function(err) {error_log(err)};
+
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 var simba_log_file_path = 'C:\\Simbalauncher\\Simba\\Log\\';
@@ -189,9 +191,9 @@ var parser_log_file = function(connectionid){
     var map_key = [];
     var map_value = [];
 
-    var caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
-    var last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
-    if(last_direction != ''){
+    caller_id = get_caller_id(connectionid, path_log_files, get_generate_filename(connectionid));
+    last_direction = get_last_direction(connectionid, path_log_files, get_generate_filename(connectionid));
+    if(last_direction != '' && typeof data[connectionid] != 'undefined'){
         data[connectionid].last_direction = true;
     }
 
@@ -234,7 +236,9 @@ var parser_log_file = function(connectionid){
             height:600
           }
           if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-            data[connectionid].caller_id = true;
+            if(typeof data[connectionid] != 'undefined'){
+                data[connectionid].caller_id = true;
+            }
             var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name]);
           }
           // Create a new window
