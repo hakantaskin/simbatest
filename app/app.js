@@ -181,6 +181,7 @@ var parser_log_file = function(connectionid){
       if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
         if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
           if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
+            delete data[connectionid];
             return true;
           }
         }
@@ -253,6 +254,7 @@ var parser_log_file = function(connectionid){
       if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
         if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){
           if(data[connectionid]['last_direction'] == true && data[connectionid]['caller_id'] == true){
+            delete data[connectionid];
             return true;
           } else {
             setTimeout(function(){parser_log_file(connectionid);}, 2000);
@@ -281,12 +283,12 @@ var watch_file = function(){
     user_name = get_user_name();
     website = get_website(site);
     timestamp = new Date().getTime();
+    data = {};
 
     tail.on("line", function(tail_data) {
       new_conn_id = get_last_conn_id();
       if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
         if(new_conn_id != last_conn_id){
-          data = {};
           data[new_conn_id] = {};
           data[new_conn_id]['last_direction'] = false;
           data[new_conn_id]['caller_id'] = false;
