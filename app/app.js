@@ -239,7 +239,7 @@ var parser_log_file = function(connectionid){
             if(typeof data[connectionid] != 'undefined'){
                 data[connectionid].caller_id = true;
             }
-            var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name]);
+            var win2 = ipcRenderer.send('newwindow', [token, screen_temp_url, caller_id, website, user_name, connectionid]);
           }
           // Create a new window
       }

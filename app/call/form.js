@@ -10,6 +10,7 @@
     var token = "";
     var url = "";
     var caller_id = "";
+    var connectionid = "";
     var website = "";
     var agent = "";
     var tatilcom_url = "";
@@ -25,6 +26,7 @@
       caller_id = arg[2];
       website = arg[3];
       agent = arg[4];
+      connectionid = arg[5];
 
       $(document).ready(function(){
         fs.readFile(simba_file_path + site_file, function (err, site) {
@@ -78,5 +80,6 @@
     var prepare = function(url, caller_id){
       document.querySelector('.tab_div_1').innerHTML = '<webview id="webview_show_1" src="' + url + '" style="display:inline-flex; width:100%; position:absolute; top:48px; bottom:0;"></webview>';
       document.querySelector('.phone_number').innerHTML = 'Phone Number :' + caller_id;
+      document.querySelector('.connection_id').innerHTML = 'Connection ID :' + connectionid;
     }
 }());
