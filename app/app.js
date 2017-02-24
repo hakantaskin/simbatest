@@ -240,13 +240,8 @@ var parser_log_file = function(connectionid, parser_token){
               data[connectionid].caller_id = true;
           }
           if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-            if(last_conn_id == connectiond){
-              console.log("***** 1 ****");
-              console.log(last_conn_id + " == " + connectionid);
+            if(last_conn_id == connectionid){
               var win2 = ipcRenderer.send('newwindow', [parser_token, screen_temp_url, caller_id, website, user_name, connectionid]);
-            } else {
-              console.log("***** 1 Else ****");
-              console.log(last_conn_id + " == " + connectionid);
             }
           }
           // Create a new window
@@ -264,13 +259,8 @@ var parser_log_file = function(connectionid, parser_token){
             delete data[connectionid];
             return true;
           } else {
-            if(last_conn_id == connectiond){
-              console.log("******* 2 *****");
-              console.log(last_conn_id + " == " + connectionid);
+            if(last_conn_id == connectionid){
                 setTimeout(function(){parser_log_file(connectionid, parser_token);}, 1000);
-            } else {
-              console.log("***** 2 else ****");
-              console.log(last_conn_id + " == " + connectionid);
             }
           }
         }
