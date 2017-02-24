@@ -188,6 +188,10 @@ var parser_log_file = function(connectionid, parser_token){
       }
     }
 
+    if(last_conn_id != connectionid){
+      return true;
+    }
+
     site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
     var map_key = [];
     var map_value = [];
@@ -257,7 +261,9 @@ var parser_log_file = function(connectionid, parser_token){
             delete data[connectionid];
             return true;
           } else {
-            setTimeout(function(){parser_log_file(connectionid, parser_token);}, 1000);
+            if(last_conn_id == connectiond){
+                setTimeout(function(){parser_log_file(connectionid, parser_token);}, 1000);
+            }
           }
         }
       }
