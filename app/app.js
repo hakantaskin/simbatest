@@ -284,7 +284,7 @@ var parser_log_file = function(connectionid, parser_token){
 
 var watch_file = function(){
   try{
-    var last_conn_id = get_last_conn_id();
+    last_conn_id = get_last_conn_id();
     var new_conn_id = '';
     var tail = new Tail(log_file);
     user_name = get_user_name();
