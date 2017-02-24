@@ -188,10 +188,6 @@ var parser_log_file = function(connectionid, parser_token){
       }
     }
 
-    if(last_conn_id != connectionid){
-      return true;
-    }
-
     site = gracefulFs.readFileSync(simba_file_path + 'site.txt').toString();
     var map_key = [];
     var map_value = [];
@@ -244,7 +240,9 @@ var parser_log_file = function(connectionid, parser_token){
               data[connectionid].caller_id = true;
           }
           if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-            var win2 = ipcRenderer.send('newwindow', [parser_token, screen_temp_url, caller_id, website, user_name, connectionid]);
+            if(last_conn_id == connectiond){
+              var win2 = ipcRenderer.send('newwindow', [parser_token, screen_temp_url, caller_id, website, user_name, connectionid]);
+            }
           }
           // Create a new window
       } else {
