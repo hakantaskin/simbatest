@@ -283,32 +283,31 @@ var get_caller_id_3 = function (last_conn_id) {
 export var get_last_conn_id = function () {
   var file_name = 'onexcapi.txt';
   var path = app.getPath('appData'); // appData ile degisecek
-  fs.stat(path + log_files + file_name, function(err, stats) {
-    if(!err){
-      var data = gracefulFs.readFileSync(path + log_files + file_name).toString();
-      var connectionids = [];
-      var i = 0;
-      if(data && data != ''){
-        var match_result = data.match(/<connectionId>(.*?)<\/connectionId>/g);
-        if(match_result != null){
-          var result = match_result.map(function(val){
-             connectionids[i] = val.replace(/<\/?connectionId>/g,'');
-             i++;
-          });
-        }
-        if(connectionids.length > 0){
-            return connectionids[(connectionids.length - 1)];
-        } else {
-          info_log('connectionid not found');
-          return '';
-        }
+  try{
+    var data = gracefulFs.readFileSync(path + log_files + file_name).toString();
+    var connectionids = [];
+    var i = 0;
+    if(data != ''){
+      var match_result = data.match(/<connectionId>(.*?)<\/connectionId>/g);
+      if(match_result != null){
+        var result = match_result.map(function(val){
+           connectionids[i] = val.replace(/<\/?connectionId>/g,'');
+           i++;
+        });
+      }
+      if(connectionids.length > 0){
+          return connectionids[(connectionids.length - 1)];
       } else {
+        info_log('connectionid not found');
         return '';
       }
     } else {
       return '';
     }
-  });
+  } catch(last_conn_err){
+    info_log(last_conn_err);
+    return '';
+  }
 }
 
 export var get_last_direction = function (last_conn_id, path_log_files = '', filename = '') {
