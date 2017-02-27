@@ -311,7 +311,8 @@ var watch_file = function(){
           watch_file();
         });
       } else {
-        setTimeout(function(){watch_file()}, 2000);
+        app.relaunch();
+        app.exit(0);
       }
     });
   } catch(watch_err){
