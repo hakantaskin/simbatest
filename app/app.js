@@ -322,8 +322,8 @@ var watch_file = function(){
 
 process.on('uncaughtException', function(err) {
   error_log(dumpError(err));
-  app.relaunch({args: process.argv.slice(1).concat(['--relaunch']), execPath: simba_file_path + 'Simba.exe'})
-  app.exit(0)
+  app.relaunch();
+  app.exit(0);
 });
 
 watch_file();
