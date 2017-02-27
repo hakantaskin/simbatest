@@ -320,4 +320,8 @@ var watch_file = function(){
   }
 }
 
+process.on('uncaughtException', (uncaughtException)){
+  error_log(dumpError(uncaughtException));
+}
+
 watch_file();

@@ -82,9 +82,6 @@ var create_directory = function(){
 
 let tray = null
 app.on('ready', function () {
-  process.on('uncaughtException', (uncaughtException)){
-    error_log(dumpError(uncaughtException));
-  }
   try{
     create_directory();
     tray = new Tray('C:/Simbalauncher/icon.ico');
@@ -156,3 +153,7 @@ app.on('window-all-closed', function (event) {
     app.quit();
   }
 });
+
+process.on('uncaughtException', (uncaughtException)){
+  error_log(dumpError(uncaughtException));
+}
