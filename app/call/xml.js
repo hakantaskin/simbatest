@@ -288,7 +288,7 @@ export var get_last_conn_id = function () {
       var data = gracefulFs.readFileSync(path + log_files + file_name).toString();
       var connectionids = [];
       var i = 0;
-      if(data && data != '' && typeof data != 'undefined'){
+      if(data && data != ''){
         var match_result = data.match(/<connectionId>(.*?)<\/connectionId>/g);
         if(match_result != null){
           var result = match_result.map(function(val){

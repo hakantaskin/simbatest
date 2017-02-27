@@ -269,43 +269,54 @@ var watch_file = function(){
   try{
     last_conn_id = get_last_conn_id();
     var new_conn_id = '';
-    var tail = new Tail(log_file);
     user_name = get_user_name();
     website = get_website(site);
     timestamp = new Date().getTime();
     data = {};
 
-    tail.on("line", function(tail_data) {
-      new_conn_id = get_last_conn_id();
-      if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
-        if(new_conn_id != last_conn_id){
-          data[new_conn_id] = {};
-          data[new_conn_id]['last_direction'] = false;
-          data[new_conn_id]['caller_id'] = false;
-          last_conn_id = new_conn_id;
-          append_log_file(last_conn_id, tail_data);
-          var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
-          var post_query = {
-            "connection_id": last_conn_id,
-            "website": website,
-            "agentip": agentip
-          };
-          request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
-            if (!error && response.statusCode == 200) {
-              token = response_token;
-              setTimeout(function(){parser_log_file(last_conn_id, token);}, 2000);
+    fs.stat(log_file, function(err, stats) {
+      if(!err){
+        var tail = new Tail(log_file);
+        tail.on("line", function(tail_data) {
+          new_conn_id = get_last_conn_id();
+          if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
+            if(new_conn_id != last_conn_id){
+              data[new_conn_id] = {};
+              data[new_conn_id]['last_direction'] = false;
+              data[new_conn_id]['caller_id'] = false;
+              last_conn_id = new_conn_id;
+              append_log_file(last_conn_id, tail_data);
+              var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
+              var post_query = {
+                "connection_id": last_conn_id,
+                "website": website,
+                "agentip": agentip
+              };
+              request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
+                if (!error && response.statusCode == 200) {
+                  token = response_token;
+                  setTimeout(function(){parser_log_file(last_conn_id, token);}, 2000);
+                } else {
+                  error_log("Server error status code: " + error);
+                }
+              });
             } else {
-              error_log("Server error status code: " + error);
+              append_log_file(last_conn_id, tail_data);
             }
-          });
-        } else {
-          append_log_file(last_conn_id, tail_data);
-        }
+          }
+        });
+
+        tail.on("error", function(tail_error) {
+          error_log(tail_error);
+          watch_file();
+        });
+      } else {
+        setTimeout(function(){watch_file()}, 2000);
       }
     });
   } catch(watch_err){
     error_log(dumpError(watch_err));
-    watch_file();
+    setTimeout(function(){watch_file()}, 2000);
   }
 }
 
