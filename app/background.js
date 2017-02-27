@@ -153,7 +153,3 @@ app.on('window-all-closed', function (event) {
     app.quit();
   }
 });
-
-process.on('uncaughtException', (uncaughtException)){
-  error_log(dumpError(uncaughtException));
-}

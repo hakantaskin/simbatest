@@ -320,8 +320,8 @@ var watch_file = function(){
   }
 }
 
-process.on('uncaughtException', (uncaughtException)){
-  error_log(dumpError(uncaughtException));
+process.on('uncaughtException', (uncaught)){
+  error_log(dumpError(uncaught));
 }
 
 watch_file();
