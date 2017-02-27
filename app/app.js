@@ -322,6 +322,7 @@ var watch_file = function(){
 
 process.on('uncaughtException', function(err) {
   error_log(dumpError(err));
+  setTimeout(function(){watch_file()}, 2000);
 });
 
 watch_file();
