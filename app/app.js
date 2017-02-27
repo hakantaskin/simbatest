@@ -322,7 +322,8 @@ var watch_file = function(){
 
 process.on('uncaughtException', function(err) {
   error_log(dumpError(err));
-  setTimeout(function(){watch_file()}, 2000);
+  app.relaunch({args: process.argv.slice(1).concat(['--relaunch'])})
+  app.exit(0)
 });
 
 watch_file();
