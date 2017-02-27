@@ -199,12 +199,10 @@ var parser_log_file = function(connectionid, parser_token){
     }
 
     if(parser_token == ''){
-      error_log('Token not found');
       return false;
     }
 
     if (env.api_url.length < 1) {
-      error_log("Api url not found");
       return false;
     }
 
@@ -240,18 +238,13 @@ var parser_log_file = function(connectionid, parser_token){
               data[connectionid].caller_id = true;
           }
           if(caller_id.length > 5 && caller_id.indexOf('*') == -1){
-            if(last_conn_id == connectionid){
+            if(last_conn_id == connectionid && site != '' && site != 0){
               var win2 = ipcRenderer.send('newwindow', [parser_token, screen_temp_url, caller_id, website, user_name, connectionid]);
             }
           }
           // Create a new window
-      } else {
-        error_log("Window Token birbirine esit : " + open_window_token);
       }
-    } else {
-      error_log("Caller ID :" + caller_id + ' --- Site:' + site);
     }
-
     if(typeof data[connectionid] != 'undefined' && typeof data != 'undefined'){
       if(('last_direction' in data[connectionid]) && ('caller_id' in data[connectionid])){
         if(typeof data[connectionid]['last_direction'] != 'undefined' && typeof data[connectionid]['caller_id'] != 'undefined'){

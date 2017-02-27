@@ -70,7 +70,11 @@ var create_directory = function(){
   var log_path = get_log_path();
   fs.stat(log_path, function(err, stats) {
     if(err){
-      fs.mkdir(log_path);
+      try{
+        fs.mkdir(log_path);
+      } catch(try_error){
+        error_log(dumpError(try_error));
+      }
     }
   });
   return log_path;
