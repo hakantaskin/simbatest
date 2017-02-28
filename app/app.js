@@ -8,7 +8,7 @@ import { get_caller_id, get_last_conn_id, get_user_name,
          get_last_direction, get_last_call_id, get_files_url,
          get_log_files_url, get_connection_id_by_data, get_last_direction_by_taildata } from './call/xml';
 import env from './env';
-var config = require('./stylesheets/js/config');
+window.$ = window.jQuery = require('./stylesheets/js/jquery');
 
 var os = require('os');
 var fs = require('fs');
