@@ -284,7 +284,7 @@ var watch_file = function(){
           var tail = new Tail(log_file);
           tail.on("line", function(tail_data) {
             new_conn_id = get_last_conn_id();
-            if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
+            if(new_conn_id != -1 && new_conn_id != ''){
               if(new_conn_id != last_conn_id){
                 data[new_conn_id] = {};
                 data[new_conn_id]['last_direction'] = false;
