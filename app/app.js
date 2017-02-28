@@ -265,13 +265,6 @@ var parser_log_file = function(connectionid, parser_token){
 
 var watch_file = function(){
   try{
-    last_conn_id = get_last_conn_id();
-    var new_conn_id = '';
-    user_name = get_user_name();
-    website = get_website(site);
-    timestamp = new Date().getTime();
-    data = {};
-
     fs.stat(log_file, function(err, stats) {
       if(err){
         if( typeof $.cookie('simba_error') != 'undefined') {
@@ -282,6 +275,12 @@ var watch_file = function(){
         app.relaunch();
         app.exit(0);
       } else {
+          last_conn_id = get_last_conn_id();
+          var new_conn_id = '';
+          user_name = get_user_name();
+          website = get_website(site);
+          timestamp = new Date().getTime();
+          data = {};
           var tail = new Tail(log_file);
           tail.on("line", function(tail_data) {
             new_conn_id = get_last_conn_id();
