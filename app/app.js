@@ -1,6 +1,6 @@
 const remote = require('electron').remote;
 const app = remote.app;
-const { ipcRenderer, ipcMain } = require('electron');
+const { ipcRenderer, ipcMain, session } = require('electron');
 import createWindow from './helpers/window';
 import { get_website, url_generate, get_clean_caller_id, error_log, info_log } from './helpers/quick';
 import jetpack from 'fs-jetpack';
@@ -17,6 +17,10 @@ const http = require('http');
 const Tail = require('tail').Tail;
 
 window['console']['error'] = function(err) {error_log(err)};
+var cookie = {url: 'simba', name: 'simba_error', value: '0'}
+session.defaultSession.cookies.set(cookie, (error) => {
+  if (error) error_log(error)
+})
 
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
@@ -320,9 +324,14 @@ var watch_file = function(){
     setTimeout(function(){watch_file()}, 2000);
   }
 }
-
+session.defaultSession.cookies.get({url: 'simba', name:'simba_error'}, (error, cookies) => {
+  console.log(cookies);
+})
 process.on('uncaughtException', function(err) {
   error_log(dumpError(err));
+  session.defaultSession.cookies.get({url: 'simba', name:'simba_error'}, (error, cookies) => {
+    console.log(cookies);
+  })
   app.relaunch();
   app.exit(0);
 });
