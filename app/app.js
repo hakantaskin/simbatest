@@ -14,7 +14,6 @@ var gracefulFs = require('graceful-fs');
 gracefulFs.gracefulify(fs);
 const http = require('http');
 const Tail = require('tail').Tail;
-
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
 var simba_log_file_path = 'C:\\Simbalauncher\\Simba\\Log\\';
