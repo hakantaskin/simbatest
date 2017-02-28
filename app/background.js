@@ -11,7 +11,7 @@ import jetpack from 'fs-jetpack';
 import { error_log, info_log } from './helpers/quick';
 const fs = require('fs');
 var gracefulFs = require('graceful-fs');
-window.$ = window.jQuery = require('./stylesheets/js/jquery');
+var jquery = require('./stylesheets/js/jquery');
 var jquery_cookie = require('./stylesheets/js/jquery_cookie');
 gracefulFs.gracefulify(fs);
 // Special module holding environment variables which you declared
