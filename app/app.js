@@ -139,7 +139,9 @@ var append_log_file = function(connectionid, tail_data){
   create_directory();
   var log_path = get_log_path();
   fs.stat(log_path, function(err, stats) {
-    if(!err){
+    if(err){
+      error_log(err);
+    } else {
       var filename = get_log_path() + connectionid + ".txt";
       try{
         fs.open(filename,'r',function(err, fd){
@@ -271,12 +273,15 @@ var watch_file = function(){
     data = {};
 
     fs.stat(log_file, function(err, stats) {
-      if(!err){
-        if($.cookie('simba_error') > 0) {
-          $.cookie('simba_error', 0);
-          app.relaunch();
-          app.exit(0);
+      if(err){
+        if( typeof $.cookie('simba_error') != 'undefined') {
+          $.cookie('simba_error', ($.cookie('simba_error') + 1));
         } else {
+          $.cookie('simba_error', 1);
+        }
+        app.relaunch();
+        app.exit(0);
+      } else {
           var tail = new Tail(log_file);
           tail.on("line", function(tail_data) {
             new_conn_id = get_last_conn_id();
@@ -306,15 +311,6 @@ var watch_file = function(){
               }
             }
           });
-        }
-      } else {
-        if( typeof $.cookie('simba_error') != 'undefined') {
-          $.cookie('simba_error', ($.cookie('simba_error') + 1));
-        } else {
-          $.cookie('simba_error', 1);
-        }
-        app.relaunch();
-        app.exit(0);
       }
     });
   } catch(watch_err){
