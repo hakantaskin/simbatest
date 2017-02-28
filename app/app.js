@@ -1,6 +1,6 @@
 const remote = require('electron').remote;
 const app = remote.app;
-const { ipcRenderer, ipcMain, session } = require('electron');
+const { ipcRenderer, ipcMain } = require('electron');
 import createWindow from './helpers/window';
 import { get_website, url_generate, get_clean_caller_id, error_log, info_log } from './helpers/quick';
 import jetpack from 'fs-jetpack';
@@ -15,12 +15,6 @@ var gracefulFs = require('graceful-fs');
 gracefulFs.gracefulify(fs);
 const http = require('http');
 const Tail = require('tail').Tail;
-
-window['console']['error'] = function(err) {error_log(err)};
-var cookie = {url: 'simba', name: 'simba_error', value: '0'}
-session.defaultSession.cookies.set(cookie, (error) => {
-  if (error) error_log(error)
-})
 
 var request = require('request');
 var simba_file_path = 'C:\\Simbalauncher\\Simba\\';
@@ -280,41 +274,47 @@ var watch_file = function(){
 
     fs.stat(log_file, function(err, stats) {
       if(!err){
-        var tail = new Tail(log_file);
-        tail.on("line", function(tail_data) {
-          new_conn_id = get_last_conn_id();
-          if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
-            if(new_conn_id != last_conn_id){
-              data[new_conn_id] = {};
-              data[new_conn_id]['last_direction'] = false;
-              data[new_conn_id]['caller_id'] = false;
-              last_conn_id = new_conn_id;
-              append_log_file(last_conn_id, tail_data);
-              var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
-              var post_query = {
-                "connection_id": last_conn_id,
-                "website": website,
-                "agentip": agentip
-              };
-              request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
-                if (!error && response.statusCode == 200) {
-                  token = response_token;
-                  setTimeout(function(){parser_log_file(last_conn_id, token);}, 2000);
-                } else {
-                  error_log("Server error status code: " + error);
-                }
-              });
-            } else {
-              append_log_file(last_conn_id, tail_data);
+        if($.cookie('simba_error') > 0) {
+          $.cookie('simba_error', 0);
+          app.relaunch();
+          app.exit(0);
+        } else {
+          var tail = new Tail(log_file);
+          tail.on("line", function(tail_data) {
+            new_conn_id = get_last_conn_id();
+            if(last_conn_id != '' && last_conn_id != -1 && new_conn_id != -1 && new_conn_id != ''){
+              if(new_conn_id != last_conn_id){
+                data[new_conn_id] = {};
+                data[new_conn_id]['last_direction'] = false;
+                data[new_conn_id]['caller_id'] = false;
+                last_conn_id = new_conn_id;
+                append_log_file(last_conn_id, tail_data);
+                var temp_api_token = url_generate(server_ip_text + env.api_token, ["[agent]"], [user_name]);
+                var post_query = {
+                  "connection_id": last_conn_id,
+                  "website": website,
+                  "agentip": agentip
+                };
+                request.post({url:temp_api_token, form:post_query, json:true}, function (error, response, response_token) {
+                  if (!error && response.statusCode == 200) {
+                    token = response_token;
+                    setTimeout(function(){parser_log_file(last_conn_id, token);}, 2000);
+                  } else {
+                    error_log("Server error status code: " + error);
+                  }
+                });
+              } else {
+                append_log_file(last_conn_id, tail_data);
+              }
             }
-          }
-        });
-
-        tail.on("error", function(tail_error) {
-          error_log(tail_error);
-          watch_file();
-        });
+          });
+        }
       } else {
+        if( typeof $.cookie('simba_error') != 'undefined') {
+          $.cookie('simba_error', ($.cookie('simba_error') + 1));
+        } else {
+          $.cookie('simba_error', 1);
+        }
         app.relaunch();
         app.exit(0);
       }
@@ -324,14 +324,14 @@ var watch_file = function(){
     setTimeout(function(){watch_file()}, 2000);
   }
 }
-session.defaultSession.cookies.get({url: 'simba', name:'simba_error'}, (error, cookies) => {
-  console.log(cookies);
-})
+
 process.on('uncaughtException', function(err) {
   error_log(dumpError(err));
-  session.defaultSession.cookies.get({url: 'simba', name:'simba_error'}, (error, cookies) => {
-    console.log(cookies);
-  })
+  if( typeof $.cookie('simba_error') != 'undefined') {
+    $.cookie('simba_error', ($.cookie('simba_error') + 1));
+  } else {
+    $.cookie('simba_error', 1);
+  }
   app.relaunch();
   app.exit(0);
 });

@@ -12,7 +12,8 @@
     "request": "^2.74.0",
     "jsonfile": "^2.3.1",
     "tail": "^1.2.1",
-    "graceful-fs": "^4.1.11"
+    "graceful-fs": "^4.1.11",
+    "jquery.cookie": "^1.4.1"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {
