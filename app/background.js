@@ -146,6 +146,8 @@ app.on('ready', function () {
     });
   } catch(app_err){
     error_log(app_err);
+    app.relaunch();
+    app.exit(0);
   }
 });
 
