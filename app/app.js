@@ -315,7 +315,8 @@ var watch_file = function(){
     });
   } catch(watch_err){
     error_log(dumpError(watch_err));
-    setTimeout(function(){watch_file()}, 2000);
+    app.relaunch();
+    app.exit(0);
   }
 }
 
